@@ -99,11 +99,11 @@ const Footer = () => {
           { !config.UI.indexingAlert.isHidden && <IndexingAlertIntTxs/> }
           <NetworkAddToWallet/>
         </Flex>
-        <Box mt={{ base: 5, lg: '44px' }}>
-          <Link fontSize="xs" href="https://www.blockscout.com">blockscout.com</Link>
+        <Box mt={{ base: 5, lg: '24px' }}>
+          <Link fontSize="xs" href="https://qng.qitmeer.io">Qitmeer Network Blockchain Explorer</Link>
         </Box>
         <Text mt={ 3 } maxW={{ base: 'unset', lg: '470px' }} fontSize="xs">
-            Blockscout is a tool for inspecting and analyzing EVM based blockchains. Blockchain explorer for Ethereum Networks.
+          Blockchain explorer for Qitmeer(ChainID 813) based on Blockscout and a tool for inspecting and analyzing QNG.
         </Text>
         <VStack spacing={ 1 } mt={ 6 } alignItems="start">
           { apiVersionUrl && (
