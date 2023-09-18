@@ -128,6 +128,10 @@ type NextPublicEnvsAdsBanner =
   NEXT_PUBLIC_AD_ADBUTLER_CONFIG_MOBILE: string;
 } |
 {
+  NEXT_PUBLIC_AD_BANNER_PROVIDER: 'custom';
+  NEXT_PUBLIC_AD_CUSTOM_CONFIG_URL: string;
+} |
+{
   NEXT_PUBLIC_AD_BANNER_PROVIDER?: undefined;
 }
 
