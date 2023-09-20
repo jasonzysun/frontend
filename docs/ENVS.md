@@ -61,6 +61,7 @@ The app instance could be customized by passing following variables to NodeJS en
 | NEXT_PUBLIC_NETWORK_CURRENCY_NAME | `string` | Network currency name | - | - | `Ether` |
 | NEXT_PUBLIC_NETWORK_CURRENCY_SYMBOL | `string` | Network currency symbol | - | - | `ETH` |
 | NEXT_PUBLIC_NETWORK_CURRENCY_DECIMALS | `string` | Network currency decimals | - | `18` | `6` |
+| NEXT_PUBLIC_NETWORK_GOVERNANCE_TOKEN_SYMBOL | `string` | Network governance token symbol | - | - | `GNO` |
 | NEXT_PUBLIC_NETWORK_VERIFICATION_TYPE | `validation` or `mining` | Verification type in the network | - | `mining` | `validation` |
 | NEXT_PUBLIC_IS_TESTNET | `boolean`| Set to true if network is testnet | - | `false` | `true` |
 
@@ -225,9 +226,9 @@ By default, the app has generic favicon. You can override this behavior by provi
 
 This feature is **enabled by default** with the `slise` ads provider. To switch it off pass `NEXT_PUBLIC_AD_BANNER_PROVIDER=none`.
 
-| Variable | Type | Description | Compulsoriness  | Default value | Example value |
+| Variable | Type| Description | Compulsoriness  | Default value | Example value |
 | --- | --- | --- | --- | --- | --- |
-| NEXT_PUBLIC_AD_BANNER_PROVIDER | `slise` \| `adbutler` \| `coinzilla` \| `custom` \| `none` | Ads provider | - | `slise` | `coinzilla` |
+| NEXT_PUBLIC_AD_BANNER_PROVIDER | `slise` \| `adbutler` \| `coinzilla` \| `custom` \| `none` | Ads provider  | - | `slise` | `coinzilla` |
 | NEXT_PUBLIC_AD_ADBUTLER_CONFIG_DESKTOP | `{ id: string; width: string; height: string }` | Placement config for desktop Adbutler banner | - | - | `{'id':'123456','width':'728','height':'90'}` |
 | NEXT_PUBLIC_AD_ADBUTLER_CONFIG_MOBILE | `{ id: string; width: number; height: number }` | Placement config for mobile Adbutler banner | - | - | `{'id':'654321','width':'300','height':'100'}` |
 | NEXT_PUBLIC_AD_CUSTOM_CONFIG_URL | `string` | URL of configuration file (.json format only) which contains list of custom banners that will be shown in the network menu. See below list of available properties for particular banner | - | - | `https://example.com/ad_custom_config.json` |
@@ -324,7 +325,7 @@ This feature is **always enabled**, but you can configure its behavior by passin
 
 #### Marketplace app configuration properties
 
-| Property | Type | Description | Compulsoriness | Example value |
+| Property | Type | Description | Compulsoriness | Example value
 | --- | --- | --- | --- | --- |
 | id | `string` | Used as slug for the app. Must be unique in the app list. | Required | `'app'` |
 | external | `boolean` | `true` means that the application opens in a new window, but not in an iframe. | - | `true` |
@@ -389,6 +390,12 @@ This feature is **enabled by default** with the `['metamask']` value. To switch 
 | Variable | Type| Description | Compulsoriness  | Default value | Example value |
 | --- | --- | --- | --- | --- | --- |
 | NEXT_PUBLIC_CONTRACT_INFO_API_HOST | `string` | Contract Info API endpoint url | Required | - | `https://contracts-info.services.blockscout.com` |
+
+&nbsp;
+
+### Safe{Core} address tags
+
+For the smart contract addresses which are [Safe{Core} accounts](https://safe.global/) public tag "Multisig: Safe" will be displayed in the address page header along side to Safe logo. The Safe service is available only for certain networks, see full list [here](https://docs.safe.global/safe-core-api/available-services). Based on provided value of `NEXT_PUBLIC_NETWORK_ID`, the feature will be enabled or disabled. 
 
 &nbsp;
 
