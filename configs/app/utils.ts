@@ -1,3 +1,4 @@
+import config from 'configs/app';
 import * as regexp from 'lib/regexp';
 
 export const getEnvValue = <T extends string>(env: T | undefined): T | undefined => env?.replaceAll('\'', '"') as T;
@@ -15,6 +16,10 @@ export const getExternalAssetFilePath = (envName: string, envValue: string | und
 
   if (!parsedValue) {
     return;
+  }
+
+  if (!config.app.useAssets) {
+    return parsedValue;
   }
 
   const fileName = envName.replace(/^NEXT_PUBLIC_/, '').replace(/_URL$/, '').toLowerCase();
