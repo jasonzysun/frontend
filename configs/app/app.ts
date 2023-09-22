@@ -18,6 +18,7 @@ const app = Object.freeze({
   port: appPort,
   baseUrl,
   useProxy: getEnvValue(process.env.NEXT_PUBLIC_USE_NEXT_JS_PROXY) === 'true',
+  useAssets: getEnvValue(process.env.NEXT_PUBLIC_DISABLE_DOWNLOAD_AT_RUN_TIME) === 'true',
 });
 
 export default app;

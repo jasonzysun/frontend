@@ -30,22 +30,22 @@ async function validateEnvs(appEnvs: Record<string, string>) {
 
   try {
     // replace ENVs with external JSON files content
-    appEnvs.NEXT_PUBLIC_FEATURED_NETWORKS = await getExternalJsonContent(
+    appEnvs.NEXT_PUBLIC_FEATURED_NETWORKS = (await getExternalJsonContent(
       './public/assets/featured_networks.json',
       appEnvs.NEXT_PUBLIC_FEATURED_NETWORKS,
-    ) || '[]';
-    appEnvs.NEXT_PUBLIC_MARKETPLACE_CONFIG_URL = await getExternalJsonContent(
+    )) || '[]';
+    appEnvs.NEXT_PUBLIC_MARKETPLACE_CONFIG_URL = (await getExternalJsonContent(
       './public/assets/marketplace_config.json',
       appEnvs.NEXT_PUBLIC_MARKETPLACE_CONFIG_URL,
-    ) || '[]';
-    appEnvs.NEXT_PUBLIC_FOOTER_LINKS = await getExternalJsonContent(
+    )) || '[]';
+    appEnvs.NEXT_PUBLIC_FOOTER_LINKS = (await getExternalJsonContent(
       './public/assets/footer_links.json',
       appEnvs.NEXT_PUBLIC_FOOTER_LINKS,
-    ) || '[]';
-    appEnvs.NEXT_PUBLIC_AD_CUSTOM_CONFIG_URL = await getExternalJsonContent(
+    )) || '[]';
+    appEnvs.NEXT_PUBLIC_AD_CUSTOM_CONFIG_URL = (await getExternalJsonContent(
       './public/assets/ad_custom_config.json',
       appEnvs.NEXT_PUBLIC_AD_CUSTOM_CONFIG_URL,
-    ) || '{ "banners": []}';
+    )) || '{ "banners": []}';
 
     await schema.validate(appEnvs, { stripUnknown: false, abortEarly: false });
     console.log('👍 All good!');
@@ -75,6 +75,11 @@ async function getExternalJsonContent(fileName: string, envValue: string): Promi
 
     fs.readFile(path.resolve(__dirname, fileName), 'utf8', (err, data) => {
       if (err) {
+        if (err.code === 'ENOENT' && process.env.NEXT_PUBLIC_DISABLE_DOWNLOAD_AT_RUN_TIME === 'true') {
+          console.log(`🚨 File not found: ${ fileName }, resolving as undefined.`);
+          resolve(undefined); // 或者 resolve('[]')，取决于你的需求
+          return;
+        }
         console.log(`🚨 Unable to read file: ${ fileName }`);
         reject(err);
         return;

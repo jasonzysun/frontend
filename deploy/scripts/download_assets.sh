@@ -51,6 +51,12 @@ download_and_save_asset() {
     local filename="$3"
     local destination="$ASSETS_DIR/$filename"
 
+    # 检查 NEXT_PUBLIC_DISABLE_DOWNLOAD_AT_RUN_TIME 环境变量是否设置为 true
+    if [ "$NEXT_PUBLIC_DISABLE_DOWNLOAD_AT_RUN_TIME" = "true" ]; then
+        echo "   [.] Download disabled at runtime. Skipping download."
+        return 1
+    fi
+
     # Check if the environment variable is set
     if [ -z "${!env_var}" ]; then
         echo "   [.] Environment variable $env_var is not set. Skipping download."
