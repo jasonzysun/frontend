@@ -18,7 +18,7 @@ export const getExternalAssetFilePath = (envName: string, envValue: string | und
     return;
   }
 
-  if (!config.app.useAssets) {
+  if (config.app.useAssets) {
     return parsedValue;
   }
 
