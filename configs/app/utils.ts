@@ -1,4 +1,3 @@
-import config from 'configs/app';
 import * as regexp from 'lib/regexp';
 
 export const getEnvValue = <T extends string>(env: T | undefined): T | undefined => env?.replaceAll('\'', '"') as T;
@@ -18,7 +17,7 @@ export const getExternalAssetFilePath = (envName: string, envValue: string | und
     return;
   }
 
-  if (config.app.useAssets) {
+  if (process.env.NEXT_PUBLIC_DISABLE_DOWNLOAD_AT_RUN_TIME) {
     return parsedValue;
   }
 
