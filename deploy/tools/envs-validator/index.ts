@@ -33,15 +33,15 @@ async function validateEnvs(appEnvs: Record<string, string>) {
     appEnvs.NEXT_PUBLIC_FEATURED_NETWORKS = (await getExternalJsonContent(
       './public/assets/featured_networks.json',
       appEnvs.NEXT_PUBLIC_FEATURED_NETWORKS,
-    )) || '[]';
+    )) || JSON.parse('[]');
     appEnvs.NEXT_PUBLIC_MARKETPLACE_CONFIG_URL = (await getExternalJsonContent(
       './public/assets/marketplace_config.json',
       appEnvs.NEXT_PUBLIC_MARKETPLACE_CONFIG_URL,
-    )) || '[]';
+    )) || JSON.parse('[]');
     appEnvs.NEXT_PUBLIC_FOOTER_LINKS = (await getExternalJsonContent(
       './public/assets/footer_links.json',
       appEnvs.NEXT_PUBLIC_FOOTER_LINKS,
-    )) || '[]';
+    )) || JSON.parse('[]');
     appEnvs.NEXT_PUBLIC_AD_CUSTOM_CONFIG_URL = (await getExternalJsonContent(
       './public/assets/ad_custom_config.json',
       appEnvs.NEXT_PUBLIC_AD_CUSTOM_CONFIG_URL,
