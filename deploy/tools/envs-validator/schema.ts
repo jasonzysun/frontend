@@ -127,7 +127,6 @@ const adCustomConfigSchema = yup
     banners: yup
       .array()
       .of(adCustomBannerConfigSchema)
-      .min(1, 'Banners array cannot be empty')
       .required(),
     interval: yup.number().positive(),
     randomStart: yup.boolean(),
