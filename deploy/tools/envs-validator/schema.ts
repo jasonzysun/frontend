@@ -38,16 +38,26 @@ const marketplaceAppSchema: yup.ObjectSchema<MarketplaceAppOverview> = yup
 const marketplaceSchema = yup
   .object()
   .shape({
+    NEXT_PUBLIC_DISABLE_DOWNLOAD_AT_RUN_TIME: yup.boolean(),
     NEXT_PUBLIC_MARKETPLACE_CONFIG_URL: yup
       .array()
       .json()
-      .of(marketplaceAppSchema),
+      .of(marketplaceAppSchema)
+      .when('NEXT_PUBLIC_DISABLE_DOWNLOAD_AT_RUN_TIME', {
+        is: (value: boolean) => value,
+        then: () => yup.array().notRequired(),
+        otherwise: () => yup.array().json().of(marketplaceAppSchema).required(),
+      }),
     NEXT_PUBLIC_MARKETPLACE_SUBMIT_FORM: yup
       .string()
-      .when('NEXT_PUBLIC_MARKETPLACE_CONFIG_URL', {
-        is: (value: Array<unknown>) => value.length > 0,
-        then: (schema) => schema.url().required(),
-        otherwise: (schema) => schema.max(-1, 'NEXT_PUBLIC_MARKETPLACE_SUBMIT_FORM cannot not be used without NEXT_PUBLIC_MARKETPLACE_CONFIG_URL'),
+      .when('NEXT_PUBLIC_DISABLE_DOWNLOAD_AT_RUN_TIME', {
+        is: (value: boolean) => value,
+        then: () => yup.string().notRequired(),
+        otherwise: () => yup.string().when('NEXT_PUBLIC_MARKETPLACE_CONFIG_URL', {
+          is: (value: Array<unknown>) => value.length > 0,
+          then: (schema) => schema.url().required(),
+          otherwise: (schema) => schema.max(-1, 'NEXT_PUBLIC_MARKETPLACE_SUBMIT_FORM cannot not be used without NEXT_PUBLIC_MARKETPLACE_CONFIG_URL'),
+        }),
       }),
   });
 
