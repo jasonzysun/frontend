@@ -5,6 +5,7 @@ import type { Address } from 'types/api/address';
 import type { TokenInfo } from 'types/api/token';
 
 import config from 'configs/app';
+import useIsSafeAddress from 'lib/hooks/useIsSafeAddress';
 import AddressFavoriteButton from 'ui/address/details/AddressFavoriteButton';
 import AddressQrCode from 'ui/address/details/AddressQrCode';
 import AddressAddToWallet from 'ui/shared/address/AddressAddToWallet';
@@ -19,6 +20,8 @@ interface Props {
 }
 
 const AddressHeadingInfo = ({ address, token, isLinkDisabled, isLoading }: Props) => {
+  const isSafeAddress = useIsSafeAddress(!isLoading && address.is_contract ? address.hash : undefined);
+
   return (
     <Flex alignItems="center">
       <AddressEntity
@@ -28,12 +31,13 @@ const AddressHeadingInfo = ({ address, token, isLinkDisabled, isLoading }: Props
         fontSize="lg"
         fontWeight={ 500 }
         noLink={ isLinkDisabled }
+        isSafeAddress={ isSafeAddress }
       />
       { !isLoading && address.is_contract && token && <AddressAddToWallet ml={ 2 } token={ token }/> }
       { !isLoading && !address.is_contract && config.features.account.isEnabled && (
         <AddressFavoriteButton hash={ address.hash } watchListId={ address.watchlist_address_id } ml={ 3 }/>
       ) }
-      <AddressQrCode hash={ address.hash } ml={ 2 } isLoading={ isLoading } flexShrink={ 0 }/>
+      <AddressQrCode address={ address } ml={ 2 } isLoading={ isLoading } flexShrink={ 0 }/>
       { config.features.account.isEnabled && <AddressActionsMenu isLoading={ isLoading }/> }
     </Flex>
   );
