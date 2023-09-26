@@ -1,8 +1,7 @@
 import * as yup from 'yup';
 
-import type { AdButlerConfig } from '../../../types/client/adButlerConfig';
-import { SUPPORTED_AD_TEXT_PROVIDERS, SUPPORTED_AD_BANNER_PROVIDERS } from '../../../types/client/adProviders';
-import type { AdTextProviders, AdBannerProviders } from '../../../types/client/adProviders';
+import type { AdButlerConfig, AdTextProviders, AdBannerProviders, AdCustomBannerConfig } from '../../../types/client/ad';
+import { SUPPORTED_AD_TEXT_PROVIDERS, SUPPORTED_AD_BANNER_PROVIDERS } from '../../../types/client/ad';
 import type { MarketplaceAppOverview } from '../../../types/client/marketplace';
 import type { NavItemExternal } from '../../../types/client/navigation-items';
 import type { WalletType } from '../../../types/client/wallets';
@@ -40,16 +39,26 @@ const marketplaceAppSchema: yup.ObjectSchema<MarketplaceAppOverview> = yup
 const marketplaceSchema = yup
   .object()
   .shape({
+    NEXT_PUBLIC_DISABLE_DOWNLOAD_AT_RUN_TIME: yup.boolean(),
     NEXT_PUBLIC_MARKETPLACE_CONFIG_URL: yup
       .array()
       .json()
-      .of(marketplaceAppSchema),
+      .of(marketplaceAppSchema)
+      .when('NEXT_PUBLIC_DISABLE_DOWNLOAD_AT_RUN_TIME', {
+        is: (value: boolean) => value,
+        then: () => yup.array().notRequired(),
+        otherwise: () => yup.array().json().of(marketplaceAppSchema).required(),
+      }),
     NEXT_PUBLIC_MARKETPLACE_SUBMIT_FORM: yup
       .string()
-      .when('NEXT_PUBLIC_MARKETPLACE_CONFIG_URL', {
-        is: (value: Array<unknown>) => value.length > 0,
-        then: (schema) => schema.url().required(),
-        otherwise: (schema) => schema.max(-1, 'NEXT_PUBLIC_MARKETPLACE_SUBMIT_FORM cannot not be used without NEXT_PUBLIC_MARKETPLACE_CONFIG_URL'),
+      .when('NEXT_PUBLIC_DISABLE_DOWNLOAD_AT_RUN_TIME', {
+        is: (value: boolean) => value,
+        then: () => yup.string().notRequired(),
+        otherwise: () => yup.string().when('NEXT_PUBLIC_MARKETPLACE_CONFIG_URL', {
+          is: (value: Array<unknown>) => value.length > 0,
+          then: (schema) => schema.url().required(),
+          otherwise: (schema) => schema.max(-1, 'NEXT_PUBLIC_MARKETPLACE_SUBMIT_FORM cannot not be used without NEXT_PUBLIC_MARKETPLACE_CONFIG_URL'),
+        }),
       }),
   });
 
@@ -104,12 +113,44 @@ const adButlerConfigSchema = yup
       .required(),
   });
 
+const adCustomBannerConfigSchema: yup.ObjectSchema<AdCustomBannerConfig> = yup
+  .object()
+  .shape({
+    text: yup.string(),
+    url: yup.string().url(),
+    desktopImageUrl: yup.string().url().required(),
+    mobileImageUrl: yup.string().url().required(),
+  });
+
+const adCustomConfigSchema = yup
+  .object()
+  .shape({
+    banners: yup
+      .array()
+      .of(adCustomBannerConfigSchema)
+      .required(),
+    interval: yup.number().positive(),
+    randomStart: yup.boolean(),
+    randomNextAd: yup.boolean(),
+  })
+  .when('NEXT_PUBLIC_AD_BANNER_PROVIDER', {
+    is: (value: AdBannerProviders) => value === 'custom',
+    then: (schema) => schema,
+    otherwise: (schema) =>
+      schema.test(
+        'custom-validation',
+        'NEXT_PUBLIC_AD_CUSTOM_CONFIG_URL cannot not be used without NEXT_PUBLIC_AD_BANNER_PROVIDER being set to "custom"',
+        () => false,
+      ),
+  });
+
 const adsBannerSchema = yup
   .object()
   .shape({
     NEXT_PUBLIC_AD_BANNER_PROVIDER: yup.string<AdBannerProviders>().oneOf(SUPPORTED_AD_BANNER_PROVIDERS),
     NEXT_PUBLIC_AD_ADBUTLER_CONFIG_DESKTOP: adButlerConfigSchema,
     NEXT_PUBLIC_AD_ADBUTLER_CONFIG_MOBILE: adButlerConfigSchema,
+    NEXT_PUBLIC_AD_CUSTOM_CONFIG_URL: adCustomConfigSchema,
   });
 
 const sentrySchema = yup
@@ -236,6 +277,7 @@ const schema = yup
     NEXT_PUBLIC_APP_HOST: yup.string().required(),
     NEXT_PUBLIC_APP_PROTOCOL: yup.string().oneOf(protocols),
     NEXT_PUBLIC_APP_PORT: yup.number().positive().integer(),
+    NEXT_PUBLIC_DISABLE_DOWNLOAD_AT_RUN_TIME: yup.boolean(),
 
     // 2. Blockchain parameters
     NEXT_PUBLIC_NETWORK_NAME: yup.string().required(),

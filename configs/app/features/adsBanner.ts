@@ -1,9 +1,8 @@
 import type { Feature } from './types';
-import type { AdButlerConfig } from 'types/client/adButlerConfig';
-import { SUPPORTED_AD_BANNER_PROVIDERS } from 'types/client/adProviders';
-import type { AdBannerProviders } from 'types/client/adProviders';
+import type { AdButlerConfig, AdBannerProviders } from 'types/client/ad';
+import { SUPPORTED_AD_BANNER_PROVIDERS } from 'types/client/ad';
 
-import { getEnvValue, parseEnvJson } from '../utils';
+import { getEnvValue, getExternalAssetFilePath, parseEnvJson } from '../utils';
 
 const provider: AdBannerProviders = (() => {
   const envValue = getEnvValue(process.env.NEXT_PUBLIC_AD_BANNER_PROVIDER) as AdBannerProviders;
@@ -14,7 +13,7 @@ const provider: AdBannerProviders = (() => {
 const title = 'Banner ads';
 
 type AdsBannerFeaturePayload = {
-  provider: Exclude<AdBannerProviders, 'adbutler' | 'none'>;
+  provider: Exclude<AdBannerProviders, 'adbutler' | 'custom' | 'none'>;
 } | {
   provider: 'adbutler';
   adButler: {
@@ -23,6 +22,9 @@ type AdsBannerFeaturePayload = {
       mobile: AdButlerConfig;
     };
   };
+} | {
+  provider: 'custom';
+  configUrl: string;
 }
 
 const config: Feature<AdsBannerFeaturePayload> = (() => {
@@ -41,6 +43,16 @@ const config: Feature<AdsBannerFeaturePayload> = (() => {
             mobile: mobileConfig,
           },
         },
+      });
+    }
+  } else if (provider === 'custom') {
+    const configUrl = getExternalAssetFilePath('NEXT_PUBLIC_AD_CUSTOM_CONFIG_URL', process.env.NEXT_PUBLIC_AD_CUSTOM_CONFIG_URL);
+    if (configUrl) {
+      return Object.freeze({
+        title,
+        isEnabled: true,
+        provider,
+        configUrl,
       });
     }
   } else if (provider !== 'none') {

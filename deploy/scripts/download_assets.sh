@@ -22,6 +22,7 @@ ASSETS_ENVS=(
     "NEXT_PUBLIC_NETWORK_ICON"
     "NEXT_PUBLIC_NETWORK_ICON_DARK"
     "NEXT_PUBLIC_OG_IMAGE_URL"
+    "NEXT_PUBLIC_AD_CUSTOM_CONFIG_URL"
 )
 
 # Create the assets directory if it doesn't exist
@@ -36,10 +37,10 @@ get_target_filename() {
     local name_prefix="${env_var#NEXT_PUBLIC_}"
     local name_suffix="${name_prefix%_URL}"
     local name_lc="$(echo "$name_suffix" | tr '[:upper:]' '[:lower:]')"
-    
+
     # Extract the extension from the URL
     local extension="${url##*.}"
-    
+
     # Construct the custom file name
     echo "$name_lc.$extension"
 }
@@ -50,6 +51,12 @@ download_and_save_asset() {
     local url="$2"
     local filename="$3"
     local destination="$ASSETS_DIR/$filename"
+
+    # 检查 NEXT_PUBLIC_DISABLE_DOWNLOAD_AT_RUN_TIME 环境变量是否设置为 true
+    if [ "$NEXT_PUBLIC_DISABLE_DOWNLOAD_AT_RUN_TIME" = "true" ]; then
+        echo "   [.] Download disabled at runtime. Skipping download."
+        return 1
+    fi
 
     # Check if the environment variable is set
     if [ -z "${!env_var}" ]; then

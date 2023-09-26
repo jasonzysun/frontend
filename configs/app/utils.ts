@@ -17,6 +17,10 @@ export const getExternalAssetFilePath = (envName: string, envValue: string | und
     return;
   }
 
+  if (process.env.NEXT_PUBLIC_DISABLE_DOWNLOAD_AT_RUN_TIME) {
+    return parsedValue;
+  }
+
   const fileName = envName.replace(/^NEXT_PUBLIC_/, '').replace(/_URL$/, '').toLowerCase();
   const fileExtension = parsedValue.match(regexp.FILE_EXTENSION)?.[1];
 
