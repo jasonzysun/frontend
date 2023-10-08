@@ -32,7 +32,7 @@ export const getExternalAssetFilePath = (envName: string) => {
     return;
   }
 
-  if (process.env.NEXT_PUBLIC_DISABLE_DOWNLOAD_AT_RUN_TIME) {
+  if (getEnvValue('NEXT_PUBLIC_DISABLE_DOWNLOAD_AT_RUN_TIME')) {
     return parsedValue;
   }
 
