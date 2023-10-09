@@ -4,6 +4,7 @@ import React, { useCallback, useState } from 'react';
 import type { StatsChartsSection } from 'types/api/stats';
 import type { StatsIntervalIds } from 'types/client/stats';
 
+import config from 'configs/app';
 import { apos } from 'lib/html-entities';
 import EmptySearchResult from 'ui/shared/EmptySearchResult';
 
@@ -65,10 +66,10 @@ const ChartsWidgetsList = ({ filterQuery, isError, isPlaceholderData, charts, in
                   <ChartWidgetContainer
                     key={ chart.id }
                     id={ chart.id }
-                    title={ chart.title }
-                    description={ chart.description }
+                    title={ chart.title.replace(/ETH/g, config.chain.currency.symbol || 'ETH') }
+                    description={ chart.description.replace(/ETH/g, config.chain.currency.symbol || 'ETH') }
                     interval={ interval }
-                    units={ chart.units || undefined }
+                    units={ chart.units?.replace(/ETH/g, config.chain.currency.symbol || 'ETH') || undefined }
                     isPlaceholderData={ isPlaceholderData }
                     onLoadingError={ handleChartLoadingError }
                   />
