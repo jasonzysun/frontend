@@ -1,6 +1,7 @@
 import { Grid } from '@chakra-ui/react';
 import React from 'react';
 
+import config from 'configs/app';
 import useApiQuery from 'lib/api/useApiQuery';
 import { STATS_COUNTER } from 'stubs/stats';
 
@@ -29,10 +30,10 @@ const NumberWidgetsList = () => {
           return (
             <NumberWidget
               key={ id + (isPlaceholderData ? index : '') }
-              label={ title }
+              label={ title.replace(/ETH/g, config.chain.currency.symbol || 'ETH') }
               value={ `${ Number(value).toLocaleString(undefined, { maximumFractionDigits: 3, notation: 'compact' }) } ${ units ? units : '' }` }
               isLoading={ isPlaceholderData }
-              description={ description }
+              description={ description?.replace(/ETH/g, config.chain.currency.symbol || 'ETH') }
             />
           );
         })
