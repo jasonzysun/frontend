@@ -12,8 +12,9 @@ const semanticTokens = {
       'default': 'gray.500',
       _dark: 'gray.400',
     },
+    // qitmm ui
     link: {
-      'default': 'blue.600',
+      'default': 'green.001',
       _dark: 'blue.300',
     },
     link_hovered: {

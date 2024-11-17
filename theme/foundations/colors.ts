@@ -1,9 +1,13 @@
 const colors = {
+  // qitmm ui fundamental color
   green: {
     '100': '#C6F6D5',
     '400': '#48BB78',
     '500': '#38A169',
     '600': '#25855A',
+    '001': '#24FF24',
+    '002': '#36FF36',
+    '003': '#48FF48',
   },
   blue: {
     '50': '#EBF8FF',
