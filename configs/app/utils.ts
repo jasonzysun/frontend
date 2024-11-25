@@ -1,5 +1,4 @@
 import * as regexp from 'lib/regexp';
-import { after } from 'lodash';
 
 export const getEnvValue = <T extends string>(env: T | undefined): T | undefined => env?.replaceAll('\'', '"') as T;
 
@@ -31,7 +30,7 @@ export const getExternalAssetFilePath = (envName: string, envValue: string | und
 type ColorOption = 'panelBtn' | 'basicLink' | 'dailyTxs' | 'dailyTxs_area' | 'basicHover';
 
 function hexToRgb(hex: string): { r: number; g: number; b: number } {
-  // 去除#号
+  // replace # 
   hex = hex.replace('#', '');
   if (hex.length === 3) {
     hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
@@ -45,14 +44,14 @@ function hexToRgb(hex: string): { r: number; g: number; b: number } {
 }
 
 function rgbToHex(rgb: string): string {
-  // 使用正则表达式提取rgb格式中的红、绿、蓝分量值
+  // extract values of red, green and blue
   const rgbMatch = rgb.match(/^rgb\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})\)$/);
   if (rgbMatch) {
       const r = parseInt(rgbMatch[1], 10);
       const g = parseInt(rgbMatch[2], 10);
       const b = parseInt(rgbMatch[3], 10);
 
-      // 将每个分量值转换为十六进制字符串，并确保是两位（不足两位在前面补0）
+      // transfer value to hexadecimal(x16), if less than two digits, add a '0'
       const hexR = r.toString(16).padStart(2, '0');
       const hexG = g.toString(16).padStart(2, '0');
       const hexB = b.toString(16).padStart(2, '0');
@@ -61,16 +60,15 @@ function rgbToHex(rgb: string): string {
   }
   return ""
 }
-
 /**
- * The `adjustColor` function is used to adjust the color based on two given colors (represented in the form of objects containing `r`, `g`, and `b` components).
- * It calculates the difference ratio between each color component and adjusts the values of each component of the passed-in `customColor` based on this ratio.
- * Finally, it returns the adjusted color (also in the form of an object containing `r`, `g`, and `b` components), aiming to make the returned color visually show a difference effect that conforms to the predefined logic compared with the target color.
- * Meanwhile, the function has done certain processing on the color component values to try to ensure that they are within the legal range of 0 - 255 (but extreme cases still need attention).
+ * `adjustColor` adjusts color based on two colors (in `r`, `g`, `b` component objects).
+ * It calculates the difference ratio of components and adjusts `customColor` values accordingly.
+ * Returns the adjusted color (in `r`, `g`, `b` component object), aiming for a difference effect as per predefined logic vs. target color.
+ * Ensures component values are within 0 - 255 (extreme cases need attention).
  * 
- * @param customColor The base color to be adjusted, passed in as an object containing three numeric components `r`, `g`, and `b`.
- * @param targetColor The target reference color, also passed in as an object containing three numeric components `r`, `g`, and `b`, which is used to calculate the difference compared with the base color.
- * @returns Returns the adjusted color, in the format of an object containing three numeric components `r`, `g`, and `b`. The values of each component are theoretically within the range of 0 - 255 to comply with the RGB color representation specification.
+ * @param customColor Base color (with `r`, `g`, `b` components).
+ * @param targetColor Target reference color (with `r`, `g`, `b` components).
+ * @returns Adjusted color (in `r`, `g`, `b` component object, 0 - 255 range).
  */
 function adjustColor(customColor: { r: number; g: number; b: number }, targetColor: { r: number; g: number; b: number }): { r: number; g: number; b: number } {
   const baseColor = hexToRgb('#3182CE');
@@ -103,14 +101,13 @@ function adjustColor(customColor: { r: number; g: number; b: number }, targetCol
 }
 
 /**
- * Calculate and return the corresponding color value (in the form of an RGB format string) for page display according to the passed-in parameter and the theme color configured in the system, following the predefined color deviation logic.
- * This function aims to make the colors of page elements present a color deviation style similar to the predefined one based on the user-defined theme color, ensuring the consistency and coordination of page color schemes.
+ * Calculate and return RGB format color for page display based on passed parameter and configured theme color, following predefined logic.
+ * Aims to make page element colors show predefined deviation style based on user-defined theme color.
  * 
- * @param colorOption - A parameter used to specify which specific usage of color configuration to obtain. Its type is `ColorOption`, and the optional values include `'panelBtn'`, `'basicLink'`, `'dailyTxs'`, `'dailyTxs_area'`, `'basicHover'`.
- * Different values correspond to different page elements (such as buttons, links, etc.). The corresponding color that conforms to the theme color deviation is calculated according to the color logic of these elements in the predefined examples.
- * @returns Returns an RGB format string representing the color value calculated based on the theme color and the passed-in parameter, which is suitable for the corresponding page element and used for the corresponding color setting on the page.
- */
-function getUserConfigForHomepageColor(colorOption: ColorOption): string {
+ * @param colorOption - Specifies color configuration usage, of type `ColorOption` with values like `'panelBtn'`, etc., corresponding to different page elements.
+ * @returns RGB format string for corresponding page element color setting.
+ */ 
+function getUserColorConfig(colorOption: ColorOption): string {
   const customColor = process.env.NEXT_PUBLIC_CUSTOM_COLOR;
   if (!customColor) {
     console.log("****NEXT_PUBLIC_CUSTOM_COLOR environment variable is not set.");
@@ -126,7 +123,7 @@ function getUserConfigForHomepageColor(colorOption: ColorOption): string {
   if (hexFormatRegex.test(customColor)) {
     baseRgb = hexToRgb(customColor);
   } else {
-    // 提取rgb格式中的各分量值
+    // extract rgb value
     const rgbMatch = customColor.match(rgbFormatRegex);
     if (rgbMatch) {
       baseRgb = {
@@ -139,7 +136,6 @@ function getUserConfigForHomepageColor(colorOption: ColorOption): string {
       return "";
     }
   }
-  // const baseRgb = hexToRgb(customColor);
 
   let targetRgb: { r: number; g: number; b: number };
   switch (colorOption) {
@@ -167,7 +163,7 @@ function getUserConfigForHomepageColor(colorOption: ColorOption): string {
   return `rgb(${adjustedRgb.r}, ${adjustedRgb.g}, ${adjustedRgb.b})`;
 }
 
-function getUserConfigForHomepageBlackColor(colorOption: ColorOption): string {
+function getUserBlackColorConfig(colorOption: ColorOption): string {
   const customColor = process.env.NEXT_PUBLIC_CUSTOM_COLOR_BLACK;
   if (!customColor) {
     console.log("****NEXT_PUBLIC_CUSTOM_COLOR_BLACK environment variable is not set.");
@@ -187,7 +183,7 @@ function getUserConfigForHomepageBlackColor(colorOption: ColorOption): string {
   if (hexFormatRegex.test(customColor)) {
     baseRgb = hexToRgb(customColor);
   } else {
-    // 提取rgb格式中的各分量值
+    // extract rgb value
     const rgbMatch = customColor.match(rgbFormatRegex);
     if (rgbMatch) {
       baseRgb = {
@@ -218,7 +214,7 @@ function getUserConfigForHomepageBlackColor(colorOption: ColorOption): string {
 
 export function getUserConfigColorForHomePage(colorOption: ColorOption): string[] {
   if (colorOption == "dailyTxs_area") {
-    return [rgbToHex(getUserConfigForHomepageColor(colorOption)),rgbToHex(getUserConfigForHomepageBlackColor(colorOption))]
+    return [rgbToHex(getUserColorConfig(colorOption)),rgbToHex(getUserBlackColorConfig(colorOption))]
   }
-  return [getUserConfigForHomepageColor(colorOption), getUserConfigForHomepageBlackColor(colorOption)]
+  return [getUserColorConfig(colorOption), getUserBlackColorConfig(colorOption)]
 }

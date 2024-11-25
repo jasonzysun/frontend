@@ -11,9 +11,6 @@ import ProfileMenuDesktop from 'ui/snippets/profileMenu/ProfileMenuDesktop';
 import SearchBar from 'ui/snippets/searchBar/SearchBar';
 
 const Home = () => {
-  useEffect(() => {
-    console.log("****ENV",process.env.NEXT_PUBLIC_API_HOST1 )
-  }, [])
   return (
     <>
       <Box

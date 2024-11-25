@@ -260,6 +260,27 @@ const networkExplorerSchema: yup.ObjectSchema<NetworkExplorer> = yup
       }),
   });
 
+const hexColorRegex = /^#([0-9a-fA-F]{3}){1,2}$/;
+const rgbFormatRegex = /^rgb\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})\)$/; 
+
+const customColorSchema = yup
+.object()
+.shape({
+    // 针对NEXT_PUBLIC_CUSTOM_COLOR参数的验证逻辑
+    NEXT_PUBLIC_CUSTOM_COLOR: yup
+     .string()
+     .test('custom-color-format', "The color format is incorrect. It should be in hexadecimal format starting with '#' or in rgb format.", (value) => {
+        return hexColorRegex.test(value) || rgbFormatRegex.test(value);
+      }),
+    // 针对NEXT_PUBLIC_CUSTOM_COLOR_BLACK参数的验证逻辑，和上面类似
+    NEXT_PUBLIC_CUSTOM_COLOR_BLACK: yup
+     .string()
+     .test('custom-color-black-format', "The color format is incorrect. It should be in hexadecimal format starting with '#' or in rgb format.", (value) => {
+        return hexColorRegex.test(value) || rgbFormatRegex.test(value);
+      }),
+  });
+
+
 const schema = yup
   .object()
   .noUnknown(true, (params) => {
@@ -383,6 +404,7 @@ const schema = yup
   .concat(marketplaceSchema)
   .concat(rollupSchema)
   .concat(beaconChainSchema)
-  .concat(sentrySchema);
+  .concat(sentrySchema)
+  .concat(customColorSchema);
 
 export default schema;
