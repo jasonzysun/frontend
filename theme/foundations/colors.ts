@@ -1,5 +1,4 @@
 const colors = {
-  // qitmm ui fundamental color
   green: {
     '100': '#C6F6D5',
     '400': '#48BB78',

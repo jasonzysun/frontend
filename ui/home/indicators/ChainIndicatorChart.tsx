@@ -10,6 +10,7 @@ import ChartOverlay from 'ui/shared/chart/ChartOverlay';
 import ChartTooltip from 'ui/shared/chart/ChartTooltip';
 import useTimeChartController from 'ui/shared/chart/useTimeChartController';
 import calculateInnerSize from 'ui/shared/chart/utils/calculateInnerSize';
+import { getUserConfigColorForHomePage } from 'configs/app/utils';
 
 interface Props {
   data: TimeChartData;
@@ -20,8 +21,10 @@ const CHART_MARGIN = { bottom: 5, left: 10, right: 10, top: 0 };
 
 const ChainIndicatorChart = ({ data }: Props) => {
   const overlayRef = React.useRef<SVGRectElement>(null);
-  // qitmm ui line
-  const lineColor = useToken('colors', 'green.001');
+  const lineColorFromCustom = getUserConfigColorForHomePage('dailyTxs');
+  const lineColor = lineColorFromCustom[0] || useToken('colors', 'blue.500');
+  const areaColorFromCustom = getUserConfigColorForHomePage('dailyTxs_area');
+  const areaColor = areaColorFromCustom[0] || "";
 
   const [ rect, ref ] = useClientRect<SVGSVGElement>();
   const { innerWidth, innerHeight } = calculateInnerSize(rect, CHART_MARGIN);
@@ -38,6 +41,7 @@ const ChainIndicatorChart = ({ data }: Props) => {
           data={ data[0].items }
           xScale={ xScale }
           yScale={ yScale }
+          color={ areaColor }
         />
         <ChartLine
           data={ data[0].items }

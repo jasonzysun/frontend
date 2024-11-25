@@ -1,5 +1,5 @@
 import { Box, Heading, Flex, LightMode } from '@chakra-ui/react';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import config from 'configs/app';
 import ChainIndicators from 'ui/home/indicators/ChainIndicators';
@@ -11,6 +11,9 @@ import ProfileMenuDesktop from 'ui/snippets/profileMenu/ProfileMenuDesktop';
 import SearchBar from 'ui/snippets/searchBar/SearchBar';
 
 const Home = () => {
+  useEffect(() => {
+    console.log("****ENV",process.env.NEXT_PUBLIC_API_HOST1 )
+  }, [])
   return (
     <>
       <Box

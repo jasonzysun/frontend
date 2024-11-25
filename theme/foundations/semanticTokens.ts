@@ -1,3 +1,7 @@
+import { getUserConfigColorForHomePage } from "configs/app/utils";
+
+const link = getUserConfigColorForHomePage('basicLink');
+const hover = getUserConfigColorForHomePage('basicHover');
 const semanticTokens = {
   colors: {
     divider: {
@@ -12,13 +16,12 @@ const semanticTokens = {
       'default': 'gray.500',
       _dark: 'gray.400',
     },
-    // qitmm ui
     link: {
-      'default': 'green.001',
-      _dark: 'blue.300',
+      'default': link[0] || "blue.600",
+      _dark: link[1] || "blue.300",
     },
     link_hovered: {
-      'default': 'blue.400',
+      'default': hover[0] || 'blue.400',
     },
     error: {
       'default': 'red.400',
