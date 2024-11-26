@@ -83,6 +83,10 @@ The app instance could be customized by passing following variables to NodeJS en
 
 ## UI configuration
 
+### Theme Color
+| NEXT_PUBLIC_CUSTOM_COLOR | `string` | The theme color of the frontend in normal mode.  | - | `rgb(163, 112, 229)` | `\#A370E5` |
+| NEXT_PUBLIC_CUSTOM_COLOR_BLACK | `string` | The theme color of the frontend in dark mode.  | - | `rgb(163, 112, 229)` | `\#A370E5` |
+
 ### Homepage
 
 | Variable | Type| Description | Compulsoriness  | Default value | Example value |
