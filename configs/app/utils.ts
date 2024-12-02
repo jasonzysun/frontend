@@ -28,6 +28,33 @@ export const getExternalAssetFilePath = (envName: string, envValue: string | und
 };
 
 type ColorOption = 'panelBtn' | 'basicLink' | 'dailyTxs' | 'dailyTxs_area' | 'basicHover';
+const defaultColor = ['#3182CE', '#6BD425', '#A28FE6'];
+const defaultColorDict = {
+  '#3182CE': {
+    'basicLink': '#2B6CB0',
+    'basicHover': '#4299E1',
+    'panelBtn': '#EBF8FF',
+    'panelBtnDark': '#2A4365',
+    'dailyTxs': '#3182CE',
+    'dailyTxs_area': '#3182CE'
+  },
+  "#6BD425": {
+    'basicLink': '#46A705',
+    'basicHover': '#3C9600',
+    'panelBtn': '#F5F6F4',
+    'panelBtnDark': '#1D1F22',
+    'dailyTxs': '#6BD425',
+    'dailyTxs_area': '#72D82E'
+  },
+  '#A28FE6': {
+    'basicLink': '#A370E5',
+    'basicHover': '#9557E5',
+    'panelBtn': '#F5F6F4',
+    'panelBtnDark': '#1D1F22',
+    'dailyTxs': '#A28FE6',
+    'dailyTxs_area': '#9D94E4'
+  },
+}
 
 function hexToRgb(hex: string): { r: number; g: number; b: number } {
   // replace # 
@@ -60,6 +87,33 @@ function rgbToHex(rgb: string): string {
   }
   return ""
 }
+
+function getClosestColor(color: string): number {
+  if (color === "") return 0;
+  if (color.indexOf('rgb') !== -1) {
+    color = rgbToHex(color)
+  }
+  function colorDistance(color1: { r: number; g: number; b: number }, color2: { r: number; g: number; b: number }): number {
+    const rDiff = color1.r - color2.r;
+    const gDiff = color1.g - color2.g;
+    const bDiff = color1.b - color2.b;
+    return Math.sqrt(rDiff * rDiff + gDiff * gDiff + bDiff * bDiff);
+}
+  let closestColorRgb: { r: number; g: number; b: number } = hexToRgb(defaultColor[0]);
+  let closestDistance = colorDistance(hexToRgb(color), hexToRgb(defaultColor[0]));
+  let bestIndex = 0;
+
+  for (let i = 1; i < defaultColor.length; i++) {
+      const currentColor = hexToRgb(defaultColor[i]);
+      const currentDistance = colorDistance(hexToRgb(color), currentColor);
+      if (currentDistance < closestDistance) {
+        bestIndex = i;
+      }
+  }
+
+  return bestIndex;
+}
+
 /**
  * `adjustColor` adjusts color based on two colors (in `r`, `g`, `b` component objects).
  * It calculates the difference ratio of components and adjusts `customColor` values accordingly.
@@ -70,8 +124,8 @@ function rgbToHex(rgb: string): string {
  * @param targetColor Target reference color (with `r`, `g`, `b` components).
  * @returns Adjusted color (in `r`, `g`, `b` component object, 0 - 255 range).
  */
-function adjustColor(customColor: { r: number; g: number; b: number }, targetColor: { r: number; g: number; b: number }): { r: number; g: number; b: number } {
-  const baseColor = hexToRgb('#3182CE');
+function adjustColor(customColor: { r: number; g: number; b: number }, targetColor: { r: number; g: number; b: number }, baseColorStr: string): { r: number; g: number; b: number } {
+  const baseColor = hexToRgb(baseColorStr);
   function calculateDiff(before: number, after: number) {
     // minium 0 maxinum 255
     if (before == after) { return 0 }
@@ -105,9 +159,10 @@ function adjustColor(customColor: { r: number; g: number; b: number }, targetCol
  * Aims to make page element colors show predefined deviation style based on user-defined theme color.
  * 
  * @param colorOption - Specifies color configuration usage, of type `ColorOption` with values like `'panelBtn'`, etc., corresponding to different page elements.
+ * @param bsIdx - index of defaultColor
  * @returns RGB format string for corresponding page element color setting.
  */ 
-function getUserColorConfig(colorOption: ColorOption): string {
+function getUserColorConfig(colorOption: ColorOption, bsIdx: number): string {
   const customColor = process.env.NEXT_PUBLIC_CUSTOM_COLOR;
   if (!customColor) {
     console.log("****NEXT_PUBLIC_CUSTOM_COLOR environment variable is not set.");
@@ -138,32 +193,33 @@ function getUserColorConfig(colorOption: ColorOption): string {
   }
 
   let targetRgb: { r: number; g: number; b: number };
+  const defaultColorList = defaultColorDict[`${defaultColor[bsIdx]}`as '#3182CE' | '#6BD425' | '#A28FE6']
   switch (colorOption) {
     case 'panelBtn':
-      targetRgb = hexToRgb('#EBF8FF');
+      targetRgb = hexToRgb(defaultColorList['panelBtn']);
       break;
     case 'basicLink':
-      targetRgb = hexToRgb('#2B6CB0');
+      targetRgb = hexToRgb(defaultColorList['basicLink']);
       break;
     case 'dailyTxs':
-      targetRgb = hexToRgb('#3182CE');
+      targetRgb = hexToRgb(defaultColorList['dailyTxs']);
       break;
     case 'dailyTxs_area':
-      targetRgb = hexToRgb('#BEE3F8');
+      targetRgb = hexToRgb(defaultColorList['dailyTxs_area']);
       break;
     case 'basicHover':
-      targetRgb = hexToRgb('#4299E1');
+      targetRgb = hexToRgb(defaultColorList['basicHover']);
       break;
     default:
       console.log(`Invalid color option: ${colorOption}`);
       return "";
   }
 
-  const adjustedRgb = adjustColor(baseRgb, targetRgb);
+  const adjustedRgb = adjustColor(baseRgb, targetRgb, defaultColor[bsIdx] as '#3182CE' | '#6BD425' | '#A28FE6');
   return `rgb(${adjustedRgb.r}, ${adjustedRgb.g}, ${adjustedRgb.b})`;
 }
 
-function getUserBlackColorConfig(colorOption: ColorOption): string {
+function getUserBlackColorConfig(colorOption: ColorOption, bsIdx: number): string {
   const customColor = process.env.NEXT_PUBLIC_CUSTOM_COLOR_BLACK;
   if (!customColor) {
     console.log("****NEXT_PUBLIC_CUSTOM_COLOR_BLACK environment variable is not set.");
@@ -197,24 +253,31 @@ function getUserBlackColorConfig(colorOption: ColorOption): string {
     }
   }
   let targetRgb: { r: number; g: number; b: number };
+  const defaultColorList = defaultColorDict[`${defaultColor[bsIdx]}`as '#3182CE' | '#6BD425' | '#A28FE6']
+  console.log("defaultColorList",defaultColorList)
   switch (colorOption) {
     case 'panelBtn':
-      targetRgb = hexToRgb('#2A4365');
+      targetRgb = hexToRgb(defaultColorList['panelBtnDark']);
       break;
     case 'basicLink':
-      targetRgb = hexToRgb('#63B3ED');
+      targetRgb = hexToRgb(defaultColorList['basicLink']);
       break;
     default:
       return "";
   }
 
-  const adjustedRgb = adjustColor(baseRgb, targetRgb);
+  const adjustedRgb = adjustColor(baseRgb, targetRgb, defaultColor[bsIdx] as '#3182CE' | '#6BD425' | '#A28FE6');
   return `rgb(${adjustedRgb.r}, ${adjustedRgb.g}, ${adjustedRgb.b})`;
 }
 
 export function getUserConfigColorForHomePage(colorOption: ColorOption): string[] {
+  const customColor = process.env.NEXT_PUBLIC_CUSTOM_COLOR;
+  const customColorBlack = process.env.NEXT_PUBLIC_CUSTOM_COLOR_BLACK;
+  // Determine the selected color change model based on the theme color.
+  const bsIdx = getClosestColor(customColor || "");
+  const bsIdxBlack = getClosestColor(customColorBlack || "");
   if (colorOption == "dailyTxs_area") {
-    return [rgbToHex(getUserColorConfig(colorOption)),rgbToHex(getUserBlackColorConfig(colorOption))]
+    return [rgbToHex(getUserColorConfig(colorOption, bsIdx)),rgbToHex(getUserBlackColorConfig(colorOption, bsIdxBlack))]
   }
-  return [getUserColorConfig(colorOption), getUserBlackColorConfig(colorOption)]
+  return [getUserColorConfig(colorOption, bsIdx), getUserBlackColorConfig(colorOption, bsIdxBlack)]
 }
