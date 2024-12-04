@@ -19,8 +19,10 @@ import { HOMEPAGE_STATS } from 'stubs/stats';
 import LinkInternal from 'ui/shared/LinkInternal';
 
 import LatestBlocksItem from './LatestBlocksItem';
+import { getUserConfigColorForHomePage } from 'configs/app/utils';
 
 const LatestBlocks = () => {
+  const textColor = getUserConfigColorForHomePage('basicLink')[0] || "blue.400";
   const isMobile = useIsMobile();
   // const blocksMaxCount = isMobile ? 2 : 3;
   let blocksMaxCount: number;
@@ -81,7 +83,7 @@ const LatestBlocks = () => {
             <Text as="span" fontSize="sm">
               Network utilization:{ nbsp }
             </Text>
-            <Text as="span" fontSize="sm" color="blue.400" fontWeight={ 700 }>
+            <Text as="span" fontSize="sm" color={textColor} fontWeight={ 700 }>
               { statsQueryResult.data?.network_utilization_percentage.toFixed(2) }%
             </Text>
           </Skeleton>

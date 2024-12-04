@@ -1,5 +1,6 @@
 import type { SystemStyleObject, TooltipProps } from '@chakra-ui/react';
 import { Skeleton, Flex, useColorModeValue, chakra, LightMode } from '@chakra-ui/react';
+import { getUserConfigColorForHomePage } from 'configs/app/utils';
 import React from 'react';
 
 import breakpoints from 'theme/foundations/breakpoints';
@@ -35,7 +36,8 @@ const StatsItem = ({ icon, title, value, className, tooltipLabel, url, isLoading
     [`@media screen and (min-width: ${ breakpoints.lg }) and (max-width: ${ LARGEST_BREAKPOINT })`]: { alignItems: 'center' },
   };
 
-  const bgColor = useColorModeValue('blue.50', 'blue.800');
+  const stringBg = getUserConfigColorForHomePage('panelBtn');
+  const bgColor = stringBg[0] || useColorModeValue('blue.50', 'blue.800');
   const loadingBgColor = useColorModeValue('blackAlpha.50', 'whiteAlpha.50');
   const infoColor = useColorModeValue('gray.600', 'gray.400');
 
