@@ -81,6 +81,32 @@ function rgbToObject(rgbString:string): { r: number; g: number; b: number } {
     };
 }
 
+function getClosestColor(color: string): number {
+  if (color === "") return 0;
+  if (color.indexOf('rgb') !== -1) {
+    color = rgbToHex(color)
+  }
+  function colorDistance(color1: { r: number; g: number; b: number }, color2: { r: number; g: number; b: number }): number {
+    const rDiff = color1.r - color2.r;
+    const gDiff = color1.g - color2.g;
+    const bDiff = color1.b - color2.b;
+    return Math.sqrt(rDiff * rDiff + gDiff * gDiff + bDiff * bDiff);
+}
+  let closestColorRgb: { r: number; g: number; b: number } = hexToRgb(defaultColor[0]);
+  let closestDistance = colorDistance(hexToRgb(color), hexToRgb(defaultColor[0]));
+  let bestIndex = 0;
+
+  for (let i = 1; i < defaultColor.length; i++) {
+      const currentColor = hexToRgb(defaultColor[i]);
+      const currentDistance = colorDistance(hexToRgb(color), currentColor);
+      if (currentDistance < closestDistance) {
+        bestIndex = i;
+      }
+  }
+
+  return bestIndex;
+}
+
 /**
  * `adjustColor` adjusts color based on two colors (in `r`, `g`, `b` component objects).
  * It calculates the difference ratio of components and adjusts `customColor` values accordingly.
