@@ -18,7 +18,7 @@ const semanticTokens = {
     },
     link: {
       'default': link[0] || "blue.600",
-      _dark: link[1] || "blue.300",
+      _dark: link[1] || link[0] || "blue.300",
     },
     link_hovered: {
       'default': hover[0] || 'blue.400',

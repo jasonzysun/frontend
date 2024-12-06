@@ -37,7 +37,7 @@ const StatsItem = ({ icon, title, value, className, tooltipLabel, url, isLoading
   };
 
   const stringBg = getUserConfigColorForHomePage('panelBtn');
-  const bgColor = stringBg[0] || useColorModeValue('blue.50', 'blue.800');
+  const bgColor = useColorModeValue(stringBg[0] || 'blue.50', stringBg[1] || stringBg[0] || 'blue.800');
   const loadingBgColor = useColorModeValue('blackAlpha.50', 'whiteAlpha.50');
   const infoColor = useColorModeValue('gray.600', 'gray.400');
 

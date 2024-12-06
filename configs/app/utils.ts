@@ -254,7 +254,6 @@ function getUserBlackColorConfig(colorOption: ColorOption, bsIdx: number): strin
   }
   let targetRgb: { r: number; g: number; b: number };
   const defaultColorList = defaultColorDict[`${defaultColor[bsIdx]}`as '#3182CE' | '#6BD425' | '#A28FE6']
-  console.log("defaultColorList",defaultColorList)
   switch (colorOption) {
     case 'panelBtn':
       targetRgb = hexToRgb(defaultColorList['panelBtnDark']);
