@@ -24,7 +24,7 @@ export const getExternalAssetFilePath = (envName: string, envValue: string | und
   const fileName = envName.replace(/^NEXT_PUBLIC_/, '').replace(/_URL$/, '').toLowerCase();
   const fileExtension = parsedValue.match(regexp.FILE_EXTENSION)?.[1];
 
-  return `/assets/${fileName}.${fileExtension}`;
+  return `/assets/${ fileName }.${ fileExtension }`;
 };
 
 type ColorOption = 'panelBtn' | 'basicLink' | 'dailyTxs' | 'dailyTxs_area' | 'basicHover';
@@ -41,7 +41,7 @@ interface ColorConfig {
 }
 
 function hexToRgb(hex: string): { r: number; g: number; b: number } {
-  // replace # 
+  // replace #
   hex = hex.replace('#', '');
   if (hex.length === 3) {
     hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
@@ -50,7 +50,7 @@ function hexToRgb(hex: string): { r: number; g: number; b: number } {
   return {
     r: (bigint >> 16) & 255,
     g: (bigint >> 8) & 255,
-    b: bigint & 255
+    b: bigint & 255,
   };
 }
 
@@ -67,44 +67,18 @@ function rgbToHex(rgb: string): string {
     const hexG = g.toString(16).padStart(2, '0');
     const hexB = b.toString(16).padStart(2, '0');
 
-    return `#${hexR}${hexG}${hexB}`;
+    return `#${ hexR }${ hexG }${ hexB }`;
   }
-  return ""
+  return '';
 }
 
-function rgbToObject(rgbString:string): { r: number; g: number; b: number } {
-    const parts = rgbString.slice(4, -1).split(',');
-    return {
-      r: parseInt(parts[0].trim(), 10),
-      g: parseInt(parts[1].trim(), 10),
-      b: parseInt(parts[2].trim(), 10),
-    };
-}
-
-function getClosestColor(color: string): number {
-  if (color === "") return 0;
-  if (color.indexOf('rgb') !== -1) {
-    color = rgbToHex(color)
-  }
-  function colorDistance(color1: { r: number; g: number; b: number }, color2: { r: number; g: number; b: number }): number {
-    const rDiff = color1.r - color2.r;
-    const gDiff = color1.g - color2.g;
-    const bDiff = color1.b - color2.b;
-    return Math.sqrt(rDiff * rDiff + gDiff * gDiff + bDiff * bDiff);
-}
-  let closestColorRgb: { r: number; g: number; b: number } = hexToRgb(defaultColor[0]);
-  let closestDistance = colorDistance(hexToRgb(color), hexToRgb(defaultColor[0]));
-  let bestIndex = 0;
-
-  for (let i = 1; i < defaultColor.length; i++) {
-      const currentColor = hexToRgb(defaultColor[i]);
-      const currentDistance = colorDistance(hexToRgb(color), currentColor);
-      if (currentDistance < closestDistance) {
-        bestIndex = i;
-      }
-  }
-
-  return bestIndex;
+function rgbToObject(rgbString: string): { r: number; g: number; b: number } {
+  const parts = rgbString.slice(4, -1).split(',');
+  return {
+    r: parseInt(parts[0].trim(), 10),
+    g: parseInt(parts[1].trim(), 10),
+    b: parseInt(parts[2].trim(), 10),
+  };
 }
 
 /**
@@ -112,28 +86,41 @@ function getClosestColor(color: string): number {
  * It calculates the difference ratio of components and adjusts `customColor` values accordingly.
  * Returns the adjusted color (in `r`, `g`, `b` component object), aiming for a difference effect as per predefined logic vs. target color.
  * Ensures component values are within 0 - 255 (extreme cases need attention).
- * 
+ *
  * @param customColor Base color (with `r`, `g`, `b` components).
  * @param targetColor Target reference color (with `r`, `g`, `b` components).
  * @returns Adjusted color (in `r`, `g`, `b` component object, 0 - 255 range).
  */
-function adjustColor(customColor: { r: number; g: number; b: number }, targetColor: { r: number; g: number; b: number }, baseColorStr: string): { r: number; g: number; b: number } {
+function adjustColor(customColor: { r: number; g: number; b: number }, targetColor: { r: number; g: number; b: number }, baseColorStr: string):
+{ r: number; g: number; b: number } {
   const baseColor = hexToRgb(baseColorStr);
   function calculateDiff(before: number, after: number) {
     // minium 0 maxinum 255
-    if (before == after) { return 0 }
-    if (after <= 0) return -1;
-    if (255 <= after) return 1;
+    if (before === after) {
+      return 0;
+    }
+    if (after <= 0) {
+      return -1;
+    }
+    if (255 <= after) {
+      return 1;
+    }
     if (before < after) {
-      return (after - before) / (255 - before)
+      return (after - before) / (255 - before);
     } else {
-      return (after - before) / before
+      return (after - before) / before;
     }
   }
   function calculateResult(base: number, diff: number) {
-    if (diff === -1) return 0;
-    if (diff === 0) return base;
-    if (diff === 1) return 255;
+    if (diff === -1) {
+      return 0;
+    }
+    if (diff === 0) {
+      return base;
+    }
+    if (diff === 1) {
+      return 255;
+    }
     const _base = 255 - base;
     return diff < 0 ? (base * (1 + diff)) : (base + _base * diff);
   }
@@ -150,18 +137,19 @@ function adjustColor(customColor: { r: number; g: number; b: number }, targetCol
 /**
  * Calculate and return RGB format color for page display based on passed parameter and configured theme color, following predefined logic.
  * Aims to make page element colors show predefined deviation style based on user-defined theme color.
- * 
- * @param colorOption - Specifies color configuration usage, of type `ColorOption` with values like `'panelBtn'`, etc., corresponding to different page elements.
+ *
+ * @param colorOption - Specifies color configuration usage, of type `ColorOption` with values like `'panelBtn'`, etc.,corresponding to different page elements.
  * @returns RGB format string for corresponding page element color setting.
  */
 function getUserColorConfig(colorOption: ColorOption): string {
   const customColorJSON = parseEnvJson<ColorConfig | null>(getEnvValue(process.env.NEXT_PUBLIC_CUSTOM_COLOR));
 
   if (!customColorJSON || !customColorJSON.brightThemeColor) {
-    console.log("****NEXT_PUBLIC_CUSTOM_COLOR environment variable has not been set.");
-    return "";
+    /* eslint-disable-next-line no-console */
+    console.log('****NEXT_PUBLIC_CUSTOM_COLOR environment variable has not been set.');
+    return '';
   }
-  
+
   const {
     brightThemeColor: themeColor,
     textColor,
@@ -170,47 +158,63 @@ function getUserColorConfig(colorOption: ColorOption): string {
     lineOfCurveGraphColor: lineColor,
     shadowOfCurveGraphColor: shadowColor,
   } = customColorJSON;
-  
-  const rgbFormatRegex = /^rgb\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})\)$/;
 
-  let result = "";
-  let baseRgb = hexToRgb('#3182CE'); 
-  let customRgb = rgbFormatRegex.test(themeColor) ? rgbToObject(themeColor) : hexToRgb(themeColor);
+  const rgbFormatRegex = /^rgb\(\d{1,3},\s*\d{1,3},\s*\d{1,3}\)$/;
+
+  let result = '';
+  const baseRgb = hexToRgb('#3182CE');
+  const customRgb = rgbFormatRegex.test(themeColor) ? rgbToObject(themeColor) : hexToRgb(themeColor);
   let adjustRgb: { r: number; g: number; b: number };
   switch (colorOption) {
     case 'panelBtn':
-      adjustRgb = adjustColor(customRgb, baseRgb, '#EBF8FF')
-      result = buttonColor ? 
-        (rgbFormatRegex.test(buttonColor) ? buttonColor : `rgb(${hexToRgb(buttonColor).r}, ${hexToRgb(buttonColor).g}, ${hexToRgb(buttonColor).b})`) :
-        `rgb(${adjustRgb.r}, ${adjustRgb.g}, ${adjustRgb.b})`
+      adjustRgb = adjustColor(customRgb, baseRgb, '#EBF8FF');
+      if (buttonColor) {
+        result = rgbFormatRegex.test(buttonColor) ? buttonColor :
+          `rgb(${ hexToRgb(buttonColor).r }, ${ hexToRgb(buttonColor).g }, ${ hexToRgb(buttonColor).b })`;
+      } else {
+        result = `rgb(${ adjustRgb.r }, ${ adjustRgb.g }, ${ adjustRgb.b })`;
+      }
       break;
     case 'basicLink':
-      adjustRgb = adjustColor(customRgb, baseRgb, '#2B6CB0')
-      result = textColor ? 
-        (rgbFormatRegex.test(textColor) ? textColor : `rgb(${hexToRgb(textColor).r}, ${hexToRgb(textColor).g}, ${hexToRgb(textColor).b})`) :
-        `rgb(${adjustRgb.r}, ${adjustRgb.g}, ${adjustRgb.b})`
+      adjustRgb = adjustColor(customRgb, baseRgb, '#2B6CB0');
+      if (textColor) {
+        result = rgbFormatRegex.test(textColor) ? textColor :
+          `rgb(${ hexToRgb(textColor).r }, ${ hexToRgb(textColor).g }, ${ hexToRgb(textColor).b })`;
+      } else {
+        result = `rgb(${ adjustRgb.r }, ${ adjustRgb.g }, ${ adjustRgb.b })`;
+      }
       break;
     case 'dailyTxs':
-      adjustRgb = adjustColor(customRgb, baseRgb, '#3182CE')
-      result = lineColor ? 
-        (rgbFormatRegex.test(lineColor) ? lineColor : `rgb(${hexToRgb(lineColor).r}, ${hexToRgb(lineColor).g}, ${hexToRgb(lineColor).b})`) :
-        `rgb(${adjustRgb.r}, ${adjustRgb.g}, ${adjustRgb.b})`
+      adjustRgb = adjustColor(customRgb, baseRgb, '#3182CE');
+      if (lineColor) {
+        result = rgbFormatRegex.test(lineColor) ? lineColor :
+          `rgb(${ hexToRgb(lineColor).r }, ${ hexToRgb(lineColor).g }, ${ hexToRgb(lineColor).b })`;
+      } else {
+        result = `rgb(${ adjustRgb.r }, ${ adjustRgb.g }, ${ adjustRgb.b })`;
+      }
       break;
     case 'dailyTxs_area':
-      adjustRgb = adjustColor(customRgb, baseRgb, '#3182CE')
-      result = shadowColor ? 
-        (rgbFormatRegex.test(shadowColor) ? shadowColor : `rgb(${hexToRgb(shadowColor).r}, ${hexToRgb(shadowColor).g}, ${hexToRgb(shadowColor).b})`) :
-        `rgb(${adjustRgb.r}, ${adjustRgb.g}, ${adjustRgb.b})`
+      adjustRgb = adjustColor(customRgb, baseRgb, '#3182CE');
+      if (shadowColor) {
+        result = rgbFormatRegex.test(shadowColor) ? shadowColor :
+          `rgb(${ hexToRgb(shadowColor).r }, ${ hexToRgb(shadowColor).g }, ${ hexToRgb(shadowColor).b })`;
+      } else {
+        result = `rgb(${ adjustRgb.r }, ${ adjustRgb.g }, ${ adjustRgb.b })`;
+      }
       break;
     case 'basicHover':
-      adjustRgb = adjustColor(customRgb, baseRgb, '#4299E1')
-      result = textHoverColor ? 
-        (rgbFormatRegex.test(textHoverColor) ? textHoverColor : `rgb(${hexToRgb(textHoverColor).r}, ${hexToRgb(textHoverColor).g}, ${hexToRgb(textHoverColor).b})`) :
-        `rgb(${adjustRgb.r}, ${adjustRgb.g}, ${adjustRgb.b})`
+      adjustRgb = adjustColor(customRgb, baseRgb, '#4299E1');
+      if (textHoverColor) {
+        result = rgbFormatRegex.test(textHoverColor) ? textHoverColor :
+          `rgb(${ hexToRgb(textHoverColor).r }, ${ hexToRgb(textHoverColor).g }, ${ hexToRgb(textHoverColor).b })`;
+      } else {
+        result = `rgb(${ adjustRgb.r }, ${ adjustRgb.g }, ${ adjustRgb.b })`;
+      }
       break;
     default:
-      console.log(`Invalid color option: ${colorOption}`);
-      return "";
+      /* eslint-disable-next-line no-console */
+      console.log(`Invalid color option: `, colorOption);
+      return '';
   }
   return result;
 }
@@ -219,39 +223,44 @@ function getUserBlackColorConfig(colorOption: ColorOption): string {
   const customColorJSON = parseEnvJson<ColorConfig | null>(getEnvValue(process.env.NEXT_PUBLIC_CUSTOM_COLOR));
 
   if (!customColorJSON || !customColorJSON.darkTheneColor) {
-    console.log("****NEXT_PUBLIC_CUSTOM_COLOR environment variable has not been set.");
-    return "";
+    /* eslint-disable-next-line no-console */
+    console.log('****NEXT_PUBLIC_CUSTOM_COLOR environment variable has not been set.');
+    return '';
   }
-  
+
   const {
     darkTheneColor: darkTheme,
-    buttonColor
+    buttonColor,
   } = customColorJSON;
 
-  const rgbFormatRegex = /^rgb\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})\)$/;
+  const rgbFormatRegex = /^rgb\(\d{1,3},\s*\d{1,3},\s*\d{1,3}\)$/;
 
-  let result = "";
-  let baseRgb = hexToRgb('#3182CE'); 
-  let customRgb = rgbFormatRegex.test(darkTheme) ? rgbToObject(darkTheme) : hexToRgb(darkTheme);
+  let result = '';
+  const baseRgb = hexToRgb('#3182CE');
+  const customRgb = rgbFormatRegex.test(darkTheme) ? rgbToObject(darkTheme) : hexToRgb(darkTheme);
   let adjustRgb: { r: number; g: number; b: number };
   switch (colorOption) {
     case 'panelBtn':
-      adjustRgb = adjustColor(customRgb, baseRgb, '#2A4365')
-      result = buttonColor ? 
-        (rgbFormatRegex.test(buttonColor) ? buttonColor : `rgb(${hexToRgb(buttonColor).r}, ${hexToRgb(buttonColor).g}, ${hexToRgb(buttonColor).b})`) :
-        `rgb(${adjustRgb.r}, ${adjustRgb.g}, ${adjustRgb.b})`
+      adjustRgb = adjustColor(customRgb, baseRgb, '#2A4365');
+      if (buttonColor) {
+        result = rgbFormatRegex.test(buttonColor) ? buttonColor :
+          `rgb(${ hexToRgb(buttonColor).r }, ${ hexToRgb(buttonColor).g }, ${ hexToRgb(buttonColor).b })`;
+      } else {
+        result = `rgb(${ adjustRgb.r }, ${ adjustRgb.g }, ${ adjustRgb.b })`;
+      }
       break;
     default:
-      console.log(`Invalid black color option: ${colorOption}`);
-      return "";
+      /* eslint-disable-next-line no-console */
+      console.log(`Invalid black color option:`, colorOption);
+      return '';
   }
   return result;
 }
 
-export function getUserConfigColorForHomePage(colorOption: ColorOption): string[] {
+export function getUserConfigColorForHomePage(colorOption: ColorOption): Array<string> {
   // Determine the selected color change model based on the theme color.
-  if (colorOption == "dailyTxs_area") {
-    return [rgbToHex(getUserColorConfig(colorOption)),rgbToHex(getUserBlackColorConfig(colorOption))]
+  if (colorOption === 'dailyTxs_area') {
+    return [ rgbToHex(getUserColorConfig(colorOption)), rgbToHex(getUserBlackColorConfig(colorOption)) ];
   }
-  return [getUserColorConfig(colorOption), getUserBlackColorConfig(colorOption)]
+  return [ getUserColorConfig(colorOption), getUserBlackColorConfig(colorOption) ];
 }
