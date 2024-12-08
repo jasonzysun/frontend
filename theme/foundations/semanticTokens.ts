@@ -1,4 +1,4 @@
-import { getUserConfigColorForHomePage } from "configs/app/utils";
+import { getUserConfigColorForHomePage } from 'configs/app/utils';
 
 const link = getUserConfigColorForHomePage('basicLink');
 const hover = getUserConfigColorForHomePage('basicHover');
@@ -17,8 +17,8 @@ const semanticTokens = {
       _dark: 'gray.400',
     },
     link: {
-      'default': link[0] || "blue.600",
-      _dark: link[1] || link[0] || "blue.300",
+      'default': link[0] || 'blue.600',
+      _dark: link[1] || link[0] || 'blue.300',
     },
     link_hovered: {
       'default': hover[0] || 'blue.400',

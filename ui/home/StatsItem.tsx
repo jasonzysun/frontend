@@ -1,8 +1,8 @@
 import type { SystemStyleObject, TooltipProps } from '@chakra-ui/react';
 import { Skeleton, Flex, useColorModeValue, chakra, LightMode } from '@chakra-ui/react';
-import { getUserConfigColorForHomePage } from 'configs/app/utils';
 import React from 'react';
 
+import { getUserConfigColorForHomePage } from 'configs/app/utils';
 import breakpoints from 'theme/foundations/breakpoints';
 import Icon from 'ui/shared/chakra/Icon';
 import Hint from 'ui/shared/Hint';
