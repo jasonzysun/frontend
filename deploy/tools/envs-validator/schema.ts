@@ -260,7 +260,6 @@ const networkExplorerSchema: yup.ObjectSchema<NetworkExplorer> = yup
       }),
   });
 
-const hexFormatRegex = /^#[\da-fA-F]{6}$/;
 const rgbFormatRegex = /^rgb\(\d{1,3},\s*\d{1,3},\s*\d{1,3}\)$/;
 
 const customColorSchema = yup
@@ -271,49 +270,49 @@ const customColorSchema = yup
       .test('brightThemeColor-format',
         'The color format for brightThemeColor is incorrect. It should be in hexadecimal format starting with \'#\' or in rgb format.',
         (value) => {
-          return value !== undefined && (hexFormatRegex.test(value) || rgbFormatRegex.test(value));
+          return value !== undefined && rgbFormatRegex.test(value);
         }),
     darkTheneColor: yup
       .string()
       .test('darkTheneColor-format',
         'The color format for darkTheneColor is incorrect. It should be in hexadecimal format starting with \'#\' or in rgb format.', (value) => {
-          return value !== undefined && (hexFormatRegex.test(value) || rgbFormatRegex.test(value));
+          return value !== undefined && rgbFormatRegex.test(value);
         }),
     textColor: yup
       .string()
       .test('textColor-format',
         'The color format for textColor is incorrect. It should be in hexadecimal format starting with \'#\' or in rgb format.', (value) => {
-          return value !== undefined && (hexFormatRegex.test(value) || rgbFormatRegex.test(value));
+          return value !== undefined && rgbFormatRegex.test(value);
         }),
     textHoverColor: yup
       .string()
       .test('textHoverColor-format',
         'The color format for textHoverColor is incorrect. It should be in hexadecimal format starting with \'#\' or in rgb format.', (value) => {
-          return value !== undefined && (hexFormatRegex.test(value) || rgbFormatRegex.test(value));
+          return value !== undefined && rgbFormatRegex.test(value);
         }),
     buttonColor: yup
       .string()
       .test('buttonColor-format',
         'The color format for buttonColor is incorrect. It should be in hexadecimal format starting with \'#\' or in rgb format.', (value) => {
-          return value !== undefined && (hexFormatRegex.test(value) || rgbFormatRegex.test(value));
+          return value !== undefined && rgbFormatRegex.test(value);
         }),
     darkButtonColor: yup
       .string()
       .test('darkButtonColor-format',
         'The color format for darkButtonColor is incorrect. It should be in hexadecimal format starting with \'#\' or in rgb format.', (value) => {
-          return value !== undefined && (hexFormatRegex.test(value) || rgbFormatRegex.test(value));
+          return value !== undefined && rgbFormatRegex.test(value);
         }),
     lineOfCurveGraphColor: yup
       .string()
       .test('lineOfCurveGraphColor-format',
         'The color format for lineOfCurveGraphColor is incorrect. It should be in hexadecimal format starting with \'#\' or in rgb format.', (value) => {
-          return value !== undefined && (hexFormatRegex.test(value) || rgbFormatRegex.test(value));
+          return value !== undefined && rgbFormatRegex.test(value);
         }),
     shadowOfCurveGraphColor: yup
       .string()
       .test('shadowOfCurveGraphColor-format',
         'The color format for shadowOfCurveGraphColor is incorrect. It should be in hexadecimal format starting with \'#\' or in rgb format.', (value) => {
-          return value !== undefined && (hexFormatRegex.test(value) || rgbFormatRegex.test(value));
+          return value !== undefined && rgbFormatRegex.test(value);
         }),
   });
 
