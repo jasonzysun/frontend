@@ -2,7 +2,7 @@ import { Button, Icon } from '@chakra-ui/react';
 import React from 'react';
 
 import config from 'configs/app';
-import { getUserConfigColorForHomePage } from 'configs/app/utils';
+import { getUserConfigColorWithOption } from 'configs/app/features/customColor';
 import useToast from 'lib/hooks/useToast';
 import * as mixpanel from 'lib/mixpanel/index';
 import useAddOrSwitchChain from 'lib/web3/useAddOrSwitchChain';
@@ -15,8 +15,8 @@ const NetworkAddToWallet = () => {
   const toast = useToast();
   const { provider, wallet } = useProvider();
   const addOrSwitchChain = useAddOrSwitchChain();
-  const btnColor = getUserConfigColorForHomePage('panelBtn')[0] || '';
-  const textColor = getUserConfigColorForHomePage('dailyTxs')[0] || '';
+  const btnColor = getUserConfigColorWithOption('panelBtn')[0] || '';
+  const textColor = getUserConfigColorWithOption('dailyTxs')[0] || '';
 
   const handleClick = React.useCallback(async() => {
     if (!wallet || !provider) {

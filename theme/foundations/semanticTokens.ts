@@ -1,7 +1,7 @@
-import { getUserConfigColorForHomePage } from 'configs/app/utils';
+import { getUserConfigColorWithOption } from 'configs/app/features/customColor';
 
-const link = getUserConfigColorForHomePage('basicLink');
-const hover = getUserConfigColorForHomePage('basicHover');
+const link = getUserConfigColorWithOption('basicLink');
+const hover = getUserConfigColorWithOption('basicHover');
 const semanticTokens = {
   colors: {
     divider: {
