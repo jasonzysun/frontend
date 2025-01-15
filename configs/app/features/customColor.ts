@@ -4,7 +4,7 @@ type ColorOption = 'panelBtn' | 'basicLink' | 'dailyTxs' | 'dailyTxs_area' | 'ba
 
 interface ColorConfig {
   brightThemeColor?: string;
-  darkTheneColor?: string;
+  darkThemeColor?: string;
   textColor?: string;
   textHoverColor?: string;
   buttonColor?: string;
@@ -195,14 +195,14 @@ function getUserColorConfig(colorOption: ColorOption): string {
 function getUserBlackColorConfig(colorOption: ColorOption): string {
   const customColorJSON = parseEnvJson<ColorConfig | null>(getEnvValue(process.env.NEXT_PUBLIC_CUSTOM_COLOR));
 
-  if (!customColorJSON || !customColorJSON.darkTheneColor) {
+  if (!customColorJSON || !customColorJSON.darkThemeColor) {
     /* eslint-disable-next-line no-console */
     console.log('****NEXT_PUBLIC_CUSTOM_COLOR environment variable has not been set.');
     return '';
   }
 
   const {
-    darkTheneColor: darkTheme,
+    darkThemeColor: darkTheme,
     buttonColor,
   } = customColorJSON;
 
