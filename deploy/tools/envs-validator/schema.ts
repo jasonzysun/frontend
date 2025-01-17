@@ -363,11 +363,6 @@ const schema = yup
               return `The color format for brightThemeColor is incorrect. Val: ${ value.toString() }, Test: ${ _res }`;
             },
             (value) => {
-              // eslint-disable-next-line no-console
-              console.log('brightThemeColor-format,val', value);
-              // eslint-disable-next-line no-console
-              console.log('brightThemeColor-format,test', rgbFormatRegex.test(value) || hexFormatRegex.test(value));
-
               return value !== undefined && (rgbFormatRegex.test(value) || hexFormatRegex.test(value));
             }),
         darkThemeColor: yup
