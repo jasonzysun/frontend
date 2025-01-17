@@ -359,7 +359,8 @@ const schema = yup
           .string()
           .test('brightThemeColor-format',
             (value) => {
-              return `The color format for brightThemeColor is incorrect. Val: ${ value }, Test: ${ rgbFormatRegex.test(value) || hexFormatRegex.test(value) }`;
+              const _res = value !== undefined && (rgbFormatRegex.test(value) || hexFormatRegex.test(value));
+              return `The color format for brightThemeColor is incorrect. Val: ${ value.toString() }, Test: ${ _res }`;
             },
             (value) => {
               // eslint-disable-next-line no-console
