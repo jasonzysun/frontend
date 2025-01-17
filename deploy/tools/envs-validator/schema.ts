@@ -360,6 +360,11 @@ const schema = yup
           .test('brightThemeColor-format',
             'The color format for brightThemeColor is incorrect. It should be in hexadecimal format starting with \'#\' or in rgb format.',
             (value) => {
+              // eslint-disable-next-line no-console
+              console.log('brightThemeColor-format,val', value);
+              // eslint-disable-next-line no-console
+              console.log('brightThemeColor-format,test', rgbFormatRegex.test(value) || hexFormatRegex.test(value));
+
               return value !== undefined && (rgbFormatRegex.test(value) || hexFormatRegex.test(value));
             }),
         darkThemeColor: yup
