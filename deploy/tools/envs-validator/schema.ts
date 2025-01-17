@@ -358,7 +358,9 @@ const schema = yup
         brightThemeColor: yup
           .string()
           .test('brightThemeColor-format',
-            'The color format for brightThemeColor is incorrect. It should be in hexadecimal format starting with \'#\' or in rgb format.',
+            (value) => {
+              return `The color format for brightThemeColor is incorrect. Val: ${ value }, Test: ${ rgbFormatRegex.test(value) || hexFormatRegex.test(value) }`;
+            },
             (value) => {
               // eslint-disable-next-line no-console
               console.log('brightThemeColor-format,val', value);
