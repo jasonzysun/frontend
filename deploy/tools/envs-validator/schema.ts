@@ -6,7 +6,7 @@ import type { MarketplaceAppOverview } from '../../../types/client/marketplace';
 import type { NavItemExternal } from '../../../types/client/navigation-items';
 import type { WalletType } from '../../../types/client/wallets';
 import { SUPPORTED_WALLETS } from '../../../types/client/wallets';
-import type { CUSTOMCOLOR } from '../../../types/customColor';
+import type { CustomColor } from '../../../types/customColor';
 import type { CustomLink, CustomLinksGroup } from '../../../types/footerLinks';
 import type { ChainIndicatorId } from '../../../types/homepage';
 import { type NetworkVerificationType, type NetworkExplorer, type FeaturedNetwork, NETWORK_GROUPS } from '../../../types/networks';
@@ -63,7 +63,7 @@ const marketplaceSchema = yup
       }),
   });
 
-const customColorSchema: yup.ObjectSchema<CUSTOMCOLOR> = yup
+const customColorSchema: yup.ObjectSchema<CustomColor> = yup
   .object()
   .shape({
     brightThemeColor: yup
