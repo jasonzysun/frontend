@@ -48,7 +48,7 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # Generate .env.production with ENVs placeholders and save build args into .env file
-COPY --chmod=+x ./deploy/scripts/make_envs_template.sh ./
+COPY --chmod=0755 ./deploy/scripts/make_envs_template.sh ./
 RUN ./make_envs_template.sh ./docs/ENVS.md
 
 # Next.js collects completely anonymous telemetry data about general usage.
@@ -97,13 +97,13 @@ COPY --from=builder /app/deploy/tools/feature-reporter/index.js ./feature-report
 
 # Copy scripts
 ## Entripoint
-COPY --chmod=+x ./deploy/scripts/entrypoint.sh .
+COPY --chmod=0755 ./deploy/scripts/entrypoint.sh .
 ## ENV replacer
-COPY --chmod=+x ./deploy/scripts/replace_envs.sh .
+COPY --chmod=0755 ./deploy/scripts/replace_envs.sh .
 ## Assets downloader
-COPY --chmod=+x ./deploy/scripts/download_assets.sh .
+COPY --chmod=0755 ./deploy/scripts/download_assets.sh .
 ## Favicon generator
-COPY --chmod=+x ./deploy/scripts/favicon_generator.sh .
+COPY --chmod=0755 ./deploy/scripts/favicon_generator.sh .
 COPY ./deploy/tools/favicon-generator ./deploy/tools/favicon-generator
 RUN ["chmod", "-R", "777", "./deploy/tools/favicon-generator"]
 RUN ["chmod", "-R", "777", "./public"]
