@@ -63,6 +63,7 @@ const marketplaceSchema = yup
   });
 
 const customColorSchema = yup
+  .object()
   .shape({
     brightThemeColor: yup
       .string()
