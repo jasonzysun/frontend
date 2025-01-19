@@ -1,11 +1,11 @@
 {
   "name": "envs-validator",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "index.ts",
   "license": "MIT",
   "scripts": {
     "build": "yarn webpack-cli -c ./webpack.config.js",
-    "validate": "node ./index.js",
+    "validate": "node ./index.ts",
     "dev": "./dev.sh"
   },
   "dependencies": {
