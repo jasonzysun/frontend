@@ -63,7 +63,7 @@ const marketplaceSchema = yup
       }),
   });
 
-const customColorSchema: yup.ObjectSchema<CustomColor> = yup
+const customColorObjSchema: yup.ObjectSchema<CustomColor> = yup
   .object()
   .shape({
     brightThemeColor: yup
@@ -119,6 +119,10 @@ const customColorSchema: yup.ObjectSchema<CustomColor> = yup
           return value !== undefined && (rgbFormatRegex.test(value) || hexFormatRegex.test(value));
         }),
   });
+
+const customColorSchema = yup
+  .json()
+  .of(customColorObjSchema);
 
 const beaconChainSchema = yup
   .object()
