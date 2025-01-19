@@ -7,7 +7,8 @@ export NEXT_PUBLIC_GIT_TAG=$(git describe --tags --abbrev=0)
 yarn build
 
 PRESETS=(
-    "local"
+    "main"
+    "main.L2"
 )
 
 validate_preset() {
