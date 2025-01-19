@@ -352,7 +352,10 @@ const schema = yup
 
     //     f. customColor
     NEXT_PUBLIC_CUSTOM_COLOR: yup
-      .object({
+      .object()
+      .transform(getEnvValue)
+      .json()
+      .shape({
         brightThemeColor: yup
           .string()
           .test('brightThemeColor-format',
