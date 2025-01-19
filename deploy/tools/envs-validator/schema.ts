@@ -353,7 +353,6 @@ const schema = yup
     //     f. customColor
     NEXT_PUBLIC_CUSTOM_COLOR: yup
       .object()
-      .json()
       .shape({
         brightThemeColor: yup
           .string()
