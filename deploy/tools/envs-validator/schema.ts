@@ -6,7 +6,6 @@ import type { MarketplaceAppOverview } from '../../../types/client/marketplace';
 import type { NavItemExternal } from '../../../types/client/navigation-items';
 import type { WalletType } from '../../../types/client/wallets';
 import { SUPPORTED_WALLETS } from '../../../types/client/wallets';
-import type { CustomColor } from '../../../types/customColor';
 import type { CustomLink, CustomLinksGroup } from '../../../types/footerLinks';
 import type { ChainIndicatorId } from '../../../types/homepage';
 import { type NetworkVerificationType, type NetworkExplorer, type FeaturedNetwork, NETWORK_GROUPS } from '../../../types/networks';
@@ -61,63 +60,6 @@ const marketplaceSchema = yup
           otherwise: (schema) => schema.max(-1, 'NEXT_PUBLIC_MARKETPLACE_SUBMIT_FORM cannot not be used without NEXT_PUBLIC_MARKETPLACE_CONFIG_URL'),
         }),
       }),
-  });
-
-const customColorSchema: yup.ObjectSchema<CustomColor> = yup
-  .object()
-  .shape({
-    brightThemeColor: yup
-      .string()
-      .test('brightThemeColor-format',
-        (value) => {
-          const _res = value !== undefined && (rgbFormatRegex.test(value) || hexFormatRegex.test(value));
-          return `The color format for brightThemeColor is incorrect. Val: ${ value.toString() }, Test: ${ _res }`;
-        },
-        (value) => {
-          return value !== undefined && (rgbFormatRegex.test(value) || hexFormatRegex.test(value));
-        }),
-    darkThemeColor: yup
-      .string()
-      .test('darkThemeColor-format',
-        'The color format for darkThemeColor is incorrect. It should be in hexadecimal format starting with \'#\' or in rgb format.', (value) => {
-          return value !== undefined && (rgbFormatRegex.test(value) || hexFormatRegex.test(value));
-        }),
-    textColor: yup
-      .string()
-      .test('textColor-format',
-        'The color format for textColor is incorrect. It should be in hexadecimal format starting with \'#\' or in rgb format.', (value) => {
-          return value !== undefined && (rgbFormatRegex.test(value) || hexFormatRegex.test(value));
-        }),
-    textHoverColor: yup
-      .string()
-      .test('textHoverColor-format',
-        'The color format for textHoverColor is incorrect. It should be in hexadecimal format starting with \'#\' or in rgb format.', (value) => {
-          return value !== undefined && (rgbFormatRegex.test(value) || hexFormatRegex.test(value));
-        }),
-    buttonColor: yup
-      .string()
-      .test('buttonColor-format',
-        'The color format for buttonColor is incorrect. It should be in hexadecimal format starting with \'#\' or in rgb format.', (value) => {
-          return value !== undefined && (rgbFormatRegex.test(value) || hexFormatRegex.test(value));
-        }),
-    darkButtonColor: yup
-      .string()
-      .test('darkButtonColor-format',
-        'The color format for darkButtonColor is incorrect. It should be in hexadecimal format starting with \'#\' or in rgb format.', (value) => {
-          return value !== undefined && (rgbFormatRegex.test(value) || hexFormatRegex.test(value));
-        }),
-    lineOfCurveGraphColor: yup
-      .string()
-      .test('lineOfCurveGraphColor-format',
-        'The color format for lineOfCurveGraphColor is incorrect. It should be in hexadecimal format starting with \'#\' or in rgb format.', (value) => {
-          return value !== undefined && (rgbFormatRegex.test(value) || hexFormatRegex.test(value));
-        }),
-    shadowOfCurveGraphColor: yup
-      .string()
-      .test('shadowOfCurveGraphColor-format',
-        'The color format for shadowOfCurveGraphColor is incorrect. It should be in hexadecimal format starting with \'#\' or in rgb format.', (value) => {
-          return value !== undefined && (rgbFormatRegex.test(value) || hexFormatRegex.test(value));
-        }),
   });
 
 const beaconChainSchema = yup
@@ -408,6 +350,65 @@ const schema = yup
       .of(networkExplorerSchema),
     NEXT_PUBLIC_HIDE_INDEXING_ALERT: yup.boolean(),
 
+    //     f. customColor
+    NEXT_PUBLIC_CUSTOM_COLOR: yup
+      .object()
+      .json()
+      .shape({
+        brightThemeColor: yup
+          .string()
+          .test('brightThemeColor-format',
+            (value) => {
+              const _res = value !== undefined && (rgbFormatRegex.test(value) || hexFormatRegex.test(value));
+              return `The color format for brightThemeColor is incorrect. Val: ${ value.toString() }, Test: ${ _res }`;
+            },
+            (value) => {
+              return value !== undefined && (rgbFormatRegex.test(value) || hexFormatRegex.test(value));
+            }),
+        darkThemeColor: yup
+          .string()
+          .test('darkThemeColor-format',
+            'The color format for darkThemeColor is incorrect. It should be in hexadecimal format starting with \'#\' or in rgb format.', (value) => {
+              return value !== undefined && (rgbFormatRegex.test(value) || hexFormatRegex.test(value));
+            }),
+        textColor: yup
+          .string()
+          .test('textColor-format',
+            'The color format for textColor is incorrect. It should be in hexadecimal format starting with \'#\' or in rgb format.', (value) => {
+              return value !== undefined && (rgbFormatRegex.test(value) || hexFormatRegex.test(value));
+            }),
+        textHoverColor: yup
+          .string()
+          .test('textHoverColor-format',
+            'The color format for textHoverColor is incorrect. It should be in hexadecimal format starting with \'#\' or in rgb format.', (value) => {
+              return value !== undefined && (rgbFormatRegex.test(value) || hexFormatRegex.test(value));
+            }),
+        buttonColor: yup
+          .string()
+          .test('buttonColor-format',
+            'The color format for buttonColor is incorrect. It should be in hexadecimal format starting with \'#\' or in rgb format.', (value) => {
+              return value !== undefined && (rgbFormatRegex.test(value) || hexFormatRegex.test(value));
+            }),
+        darkButtonColor: yup
+          .string()
+          .test('darkButtonColor-format',
+            'The color format for darkButtonColor is incorrect. It should be in hexadecimal format starting with \'#\' or in rgb format.', (value) => {
+              return value !== undefined && (rgbFormatRegex.test(value) || hexFormatRegex.test(value));
+            }),
+        lineOfCurveGraphColor: yup
+          .string()
+          .test('lineOfCurveGraphColor-format',
+            'The color format for lineOfCurveGraphColor is incorrect. It should be in hexadecimal format starting with \'#\' or in rgb format.', (value) => {
+              return value !== undefined && (rgbFormatRegex.test(value) || hexFormatRegex.test(value));
+            }),
+        shadowOfCurveGraphColor: yup
+          .string()
+          .test('shadowOfCurveGraphColor-format',
+            'The color format for shadowOfCurveGraphColor is incorrect. It should be in hexadecimal format starting with \'#\' or in rgb format.', (value) => {
+              return value !== undefined && (rgbFormatRegex.test(value) || hexFormatRegex.test(value));
+            }),
+      }),
+
     // 5. Features configuration
     NEXT_PUBLIC_API_SPEC_URL: yup.string().url(),
     NEXT_PUBLIC_STATS_API_HOST: yup.string().url(),
@@ -444,7 +445,6 @@ const schema = yup
   .concat(marketplaceSchema)
   .concat(rollupSchema)
   .concat(beaconChainSchema)
-  .concat(sentrySchema)
-  .concat(customColorSchema);
+  .concat(sentrySchema);
 
 export default schema;
