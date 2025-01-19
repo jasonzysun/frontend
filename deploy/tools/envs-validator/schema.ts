@@ -98,9 +98,11 @@ const rollupSchema = yup
       }),
   });
 
+const rgbFormatRegex = /^rgb\(\d{1,3},\s*\d{1,3},\s*\d{1,3}\)$/;
+const hexFormatRegex = /^#(?:[A-Fa-f\d]{6}|[A-Fa-f\d]{3})$/;
+
 const customColorSchema = yup
-  .object()
-  .shape({
+  .object({
     brightThemeColor: yup
       .string()
       .test('brightThemeColor-format',
@@ -316,9 +318,6 @@ const networkExplorerSchema: yup.ObjectSchema<NetworkExplorer> = yup
         block: yup.string(),
       }),
   });
-
-const rgbFormatRegex = /^rgb\(\d{1,3},\s*\d{1,3},\s*\d{1,3}\)$/;
-const hexFormatRegex = /^#(?:[A-Fa-f\d]{6}|[A-Fa-f\d]{3})$/;
 
 const schema = yup
   .object()
