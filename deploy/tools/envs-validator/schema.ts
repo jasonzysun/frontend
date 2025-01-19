@@ -63,6 +63,7 @@ const marketplaceSchema = yup
   });
 
 const customColorSchema = yup
+  .object()
   .shape({
     brightThemeColor: yup
       .string()
@@ -408,8 +409,8 @@ const schema = yup
 
     //     f. customer color
     NEXT_PUBLIC_CUSTOM_COLOR: yup
-      .object()
-      .shape(customColorSchema),
+      .json()
+      .of(customColorSchema),
 
     // 5. Features configuration
     NEXT_PUBLIC_API_SPEC_URL: yup.string().url(),
