@@ -409,8 +409,7 @@ const schema = yup
     //     f. customer color
     NEXT_PUBLIC_CUSTOM_COLOR: yup
       .object()
-      .json()
-      .of(customColorSchema),
+      .shape(customColorSchema),
 
     // 5. Features configuration
     NEXT_PUBLIC_API_SPEC_URL: yup.string().url(),
