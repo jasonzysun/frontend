@@ -23,8 +23,6 @@ const ChainIndicatorChart = ({ data }: Props) => {
   const overlayRef = React.useRef<SVGRectElement>(null);
   const _lineColor = useToken('colors', 'blue.500');
   const lineColor = config.UI.views.color.dailyTxs || _lineColor;
-  // eslint-disable-next-line
-  console.log("config.UI.views.color.dailyTxsArea",config.UI.views.color.dailyTxsArea)
   const areaColor = config.UI.views.color.dailyTxsArea || '';
 
   const [ rect, ref ] = useClientRect<SVGSVGElement>();

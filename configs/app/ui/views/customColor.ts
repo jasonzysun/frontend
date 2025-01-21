@@ -190,8 +190,6 @@ const handleCustomColor = (() => {
     defaultCustomColor.basicHover = `rgb(${ adjustRgb.r }, ${ adjustRgb.g }, ${ adjustRgb.b })`;
   }
 
-  // eslint-disable-next-line
-  console.log("freeze defaultCustomColor",defaultCustomColor);
   return Object.freeze(defaultCustomColor);
 
 })();
