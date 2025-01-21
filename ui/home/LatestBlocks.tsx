@@ -9,7 +9,6 @@ import type { Block } from 'types/api/block';
 import { route } from 'nextjs-routes';
 
 import config from 'configs/app';
-import { getUserConfigColorWithOption } from 'configs/app/features/customColor';
 import useApiQuery, { getResourceKey } from 'lib/api/useApiQuery';
 import useIsMobile from 'lib/hooks/useIsMobile';
 import { nbsp } from 'lib/html-entities';
@@ -22,7 +21,7 @@ import LinkInternal from 'ui/shared/LinkInternal';
 import LatestBlocksItem from './LatestBlocksItem';
 
 const LatestBlocks = () => {
-  const textColor = getUserConfigColorWithOption('basicLink')[0] || 'blue.400';
+  const textColor = config.UI.views.color.basicLink;
   const isMobile = useIsMobile();
   // const blocksMaxCount = isMobile ? 2 : 3;
   let blocksMaxCount: number;

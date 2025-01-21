@@ -1,7 +1,7 @@
-import { getUserConfigColorWithOption } from 'configs/app/features/customColor';
+import config from 'configs/app';
 
-const link = getUserConfigColorWithOption('basicLink');
-const hover = getUserConfigColorWithOption('basicHover');
+const link = config.UI.views.color.basicLink;
+const hover = config.UI.views.color.basicHover;
 const semanticTokens = {
   colors: {
     divider: {

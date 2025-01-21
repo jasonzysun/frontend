@@ -3,7 +3,7 @@ import React from 'react';
 
 import type { TimeChartData } from 'ui/shared/chart/types';
 
-import { getUserConfigColorWithOption } from 'configs/app/features/customColor';
+import config from 'configs/app';
 import useClientRect from 'lib/hooks/useClientRect';
 import ChartArea from 'ui/shared/chart/ChartArea';
 import ChartLine from 'ui/shared/chart/ChartLine';
@@ -21,11 +21,9 @@ const CHART_MARGIN = { bottom: 5, left: 10, right: 10, top: 0 };
 
 const ChainIndicatorChart = ({ data }: Props) => {
   const overlayRef = React.useRef<SVGRectElement>(null);
-  const lineColorFromCustom = getUserConfigColorWithOption('dailyTxs');
   const _lineColor = useToken('colors', 'blue.500');
-  const lineColor = lineColorFromCustom[0] || _lineColor;
-  const areaColorFromCustom = getUserConfigColorWithOption('dailyTxs_area');
-  const areaColor = areaColorFromCustom[0] || '';
+  const lineColor = config.UI.views.color.dailyTxs || _lineColor;
+  const areaColor = config.UI.views.color.dailyTxsArea || '';
 
   const [ rect, ref ] = useClientRect<SVGSVGElement>();
   const { innerWidth, innerHeight } = calculateInnerSize(rect, CHART_MARGIN);
