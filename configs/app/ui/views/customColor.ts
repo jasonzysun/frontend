@@ -25,6 +25,24 @@ function hexToRgb(hex: string): { r: number; g: number; b: number } {
   };
 }
 
+function rgbToHex(rgb: string): string {
+  // extract values of red, green and blue
+  const rgbMatch = rgb.match(/^rgb\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})\)$/);
+  if (rgbMatch) {
+    const r = parseInt(rgbMatch[1], 10);
+    const g = parseInt(rgbMatch[2], 10);
+    const b = parseInt(rgbMatch[3], 10);
+
+    // transfer value to hexadecimal(x16), if less than two digits, add a '0'
+    const hexR = r.toString(16).padStart(2, '0');
+    const hexG = g.toString(16).padStart(2, '0');
+    const hexB = b.toString(16).padStart(2, '0');
+
+    return `#${ hexR }${ hexG }${ hexB }`;
+  }
+  return '';
+}
+
 function rgbToObject(rgbString: string): { r: number; g: number; b: number } {
   const parts = rgbString.slice(4, -1).split(',');
   return {
@@ -159,10 +177,9 @@ const handleCustomColor = (() => {
 
   adjustRgb = adjustColor(customRgb, baseRgb, '#3182CE');
   if (shadowColor) {
-    defaultCustomColor.dailyTxsArea = rgbFormatRegex.test(shadowColor) ? shadowColor :
-      `rgb(${ hexToRgb(shadowColor).r }, ${ hexToRgb(shadowColor).g }, ${ hexToRgb(shadowColor).b })`;
+    defaultCustomColor.dailyTxsArea = rgbFormatRegex.test(shadowColor) ? rgbToHex(shadowColor) : shadowColor;
   } else {
-    defaultCustomColor.dailyTxsArea = `rgb(${ adjustRgb.r }, ${ adjustRgb.g }, ${ adjustRgb.b })`;
+    defaultCustomColor.dailyTxsArea = rgbToHex(`rgb(${ adjustRgb.r }, ${ adjustRgb.g }, ${ adjustRgb.b })`);
   }
 
   adjustRgb = adjustColor(customRgb, baseRgb, '#4299E1');
