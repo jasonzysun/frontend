@@ -17,11 +17,11 @@ const semanticTokens = {
       _dark: 'gray.400',
     },
     link: {
-      'default': link[0] || 'blue.600',
-      _dark: link[1] || link[0] || 'blue.300',
+      'default': link || 'blue.600',
+      _dark: link || 'blue.300',
     },
     link_hovered: {
-      'default': hover[0] || 'blue.400',
+      'default': hover || 'blue.400',
     },
     error: {
       'default': 'red.400',
