@@ -86,7 +86,7 @@ The app instance could be customized by passing following variables to NodeJS en
 ### Custom Color
 
 | Variable | Type| Description | Compulsoriness  | Default value | Example value |
-| NEXT_PUBLIC_CUSTOM_COLOR | `Object` | Configuration object for customizing the user interface colors. The value of each item should like the 'rgb()' format. | - | - | `{"brightThemeColor": "rgb(162, 143, 230)", "darkThemeColor": "rgb(162, 143, 230)", "textColor": "rgb(163, 112, 229)", "textHoverColor": "rgb(149, 87, 229)", "buttonColor": "rgb(245, 246, 244)", "darkButtonColor": "rgb(29, 31, 34)", "lineOfCurveGraphColor": "rgb(162, 143, 230)", "shadowOfCurveGraphColor": "rgb(162, 143, 230)"}` |
+| NEXT_PUBLIC_CUSTOM_COLOR | `Object` | Configuration object for customizing the user interface colors. The value of each item should like the 'rgb()' format. | - | - | `{'brightThemeColor': 'rgb(162, 143, 230)', 'darkThemeColor': 'rgb(162, 143, 230)', 'textColor': 'rgb(163, 112, 229)', 'textHoverColor': 'rgb(149, 87, 229)', 'buttonColor': 'rgb(245, 246, 244)', 'darkButtonColor': 'rgb(29, 31, 34)', 'lineOfCurveGraphColor': 'rgb(162, 143, 230)', 'shadowOfCurveGraphColor': 'rgb(162, 143, 230)'}` |
 
 &nbsp;
 
