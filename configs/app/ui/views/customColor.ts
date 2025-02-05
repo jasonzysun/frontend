@@ -130,6 +130,7 @@ const handleCustomColor = (() => {
     textColor,
     textHoverColor,
     buttonColor,
+    darkButtonColor,
     lineOfCurveGraphColor: lineColor,
     shadowOfCurveGraphColor: shadowColor,
   } = customColorJSON;
@@ -152,9 +153,9 @@ const handleCustomColor = (() => {
   }
 
   adjustRgb = adjustColor(customRgbDark, baseRgbDark, '#2A4365');
-  if (buttonColor) {
-    defaultCustomColor.panelBtnDark = rgbFormatRegex.test(buttonColor) ? buttonColor :
-      `rgb(${ hexToRgb(buttonColor).r }, ${ hexToRgb(buttonColor).g }, ${ hexToRgb(buttonColor).b })`;
+  if (darkButtonColor) {
+    defaultCustomColor.panelBtnDark = rgbFormatRegex.test(darkButtonColor) ? darkButtonColor :
+      `rgb(${ hexToRgb(darkButtonColor).r }, ${ hexToRgb(darkButtonColor).g }, ${ hexToRgb(darkButtonColor).b })`;
   } else {
     defaultCustomColor.panelBtnDark = `rgb(${ adjustRgb.r }, ${ adjustRgb.g }, ${ adjustRgb.b })`;
   }
