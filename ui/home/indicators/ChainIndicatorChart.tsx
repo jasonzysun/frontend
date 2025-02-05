@@ -3,6 +3,7 @@ import React from 'react';
 
 import type { TimeChartData } from 'ui/shared/chart/types';
 
+import config from 'configs/app';
 import useClientRect from 'lib/hooks/useClientRect';
 import ChartArea from 'ui/shared/chart/ChartArea';
 import ChartLine from 'ui/shared/chart/ChartLine';
@@ -10,7 +11,6 @@ import ChartOverlay from 'ui/shared/chart/ChartOverlay';
 import ChartTooltip from 'ui/shared/chart/ChartTooltip';
 import useTimeChartController from 'ui/shared/chart/useTimeChartController';
 import calculateInnerSize from 'ui/shared/chart/utils/calculateInnerSize';
-import { getUserConfigColorForHomePage } from 'configs/app/utils';
 
 interface Props {
   data: TimeChartData;
@@ -21,10 +21,9 @@ const CHART_MARGIN = { bottom: 5, left: 10, right: 10, top: 0 };
 
 const ChainIndicatorChart = ({ data }: Props) => {
   const overlayRef = React.useRef<SVGRectElement>(null);
-  const lineColorFromCustom = getUserConfigColorForHomePage('dailyTxs');
-  const lineColor = lineColorFromCustom[0] || useToken('colors', 'blue.500');
-  const areaColorFromCustom = getUserConfigColorForHomePage('dailyTxs_area');
-  const areaColor = areaColorFromCustom[0] || "";
+  const _lineColor = useToken('colors', 'blue.500');
+  const lineColor = config.UI.views.color.dailyTxs || _lineColor;
+  const areaColor = config.UI.views.color.dailyTxsArea || '';
 
   const [ rect, ref ] = useClientRect<SVGSVGElement>();
   const { innerWidth, innerHeight } = calculateInnerSize(rect, CHART_MARGIN);
@@ -41,7 +40,7 @@ const ChainIndicatorChart = ({ data }: Props) => {
           data={ data[0].items }
           xScale={ xScale }
           yScale={ yScale }
-          color={ areaColor }
+          color={ areaColor || '' }
         />
         <ChartLine
           data={ data[0].items }

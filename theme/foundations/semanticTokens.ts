@@ -1,7 +1,7 @@
-import { getUserConfigColorForHomePage } from "configs/app/utils";
+import config from 'configs/app';
 
-const link = getUserConfigColorForHomePage('basicLink');
-const hover = getUserConfigColorForHomePage('basicHover');
+const link = config.UI.views.color.basicLink;
+const hover = config.UI.views.color.basicHover;
 const semanticTokens = {
   colors: {
     divider: {
@@ -17,11 +17,11 @@ const semanticTokens = {
       _dark: 'gray.400',
     },
     link: {
-      'default': link[0] || "blue.600",
-      _dark: link[1] || "blue.300",
+      'default': link || 'blue.600',
+      _dark: link || 'blue.300',
     },
     link_hovered: {
-      'default': hover[0] || 'blue.400',
+      'default': hover || 'blue.400',
     },
     error: {
       'default': 'red.400',

@@ -7,7 +7,6 @@ import * as mixpanel from 'lib/mixpanel/index';
 import useAddOrSwitchChain from 'lib/web3/useAddOrSwitchChain';
 import useProvider from 'lib/web3/useProvider';
 import { WALLETS_INFO } from 'lib/web3/wallets';
-import { getUserConfigColorForHomePage } from 'configs/app/utils';
 
 const feature = config.features.web3Wallet;
 
@@ -15,8 +14,8 @@ const NetworkAddToWallet = () => {
   const toast = useToast();
   const { provider, wallet } = useProvider();
   const addOrSwitchChain = useAddOrSwitchChain();
-  const btnColor = getUserConfigColorForHomePage('panelBtn')[0] || "";
-  const textColor = getUserConfigColorForHomePage('dailyTxs')[0] || "";
+  const btnColor = config.UI.views.color.panelBtn || '';
+  const textColor = config.UI.views.color.dailyTxs || '';
 
   const handleClick = React.useCallback(async() => {
     if (!wallet || !provider) {
@@ -57,7 +56,7 @@ const NetworkAddToWallet = () => {
   }
 
   return (
-    <Button color={textColor} borderColor={btnColor} variant="outline" size="sm" onClick={ handleClick }>
+    <Button color={ textColor } borderColor={ btnColor } variant="outline" size="sm" onClick={ handleClick }>
       <Icon as={ WALLETS_INFO[wallet].icon } boxSize={ 5 } mr={ 2 }/>
         Add { config.chain.name }
     </Button>

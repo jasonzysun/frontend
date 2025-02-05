@@ -1,5 +1,5 @@
 import { Box, Heading, Flex, LightMode } from '@chakra-ui/react';
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import config from 'configs/app';
 import ChainIndicators from 'ui/home/indicators/ChainIndicators';
